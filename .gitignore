@@ -1,0 +1,41 @@
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# built application files
+*.apk
+*.ap_
+*.aab
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+out/
+build/
+
+# Eclipse project files
+.classpath
+.project
+
+# Gradle cache
+.gradle
+
+# IDEA/Android Studio project files, because
+# the project can be imported from settings.gradle.kts.kts
+*.iml
+
+# User-specific configurations
+.idea/*
+/projectFilesBackup/.idea/workspace.xml
+/buildSrc/build/
