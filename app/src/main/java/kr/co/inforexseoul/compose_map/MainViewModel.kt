@@ -16,7 +16,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     fun init() {
         useCase.invoke().onEach {
-            Log.d("123123", "it: $it")
+            Log.d("123123", "it..: $it")
         }.launchIn(viewModelScope)
     }
 }
