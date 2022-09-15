@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation(project(Modules.CORE_DATABASE))
     implementation(project(Modules.CORE_NETWORK))
+    implementation(project(Modules.COMMON_MODEL))
     implementationDependencies(Modules.CORE_DATA)
 }
 

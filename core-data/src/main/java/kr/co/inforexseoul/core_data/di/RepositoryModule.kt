@@ -5,15 +5,18 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.co.inforexseoul.core_data.repository.TestRepository
-import kr.co.inforexseoul.core_network.datasource.TestRemoteDataSource
+import kr.co.inforexseoul.core_data.repository.TestRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
 
+    /**
+     * @TODO 테스트용
+     * */
     @Binds
     fun bindsTestRepository(
-        testRemoteDataSource: TestRemoteDataSource
+        testRepository: TestRepositoryImpl
     ): TestRepository
 
 }

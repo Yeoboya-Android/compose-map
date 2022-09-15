@@ -16,8 +16,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
+object NetworkModule {
 
+    /**
+     * @TODO 테스트용
+     * */
     @Provides
     fun provideBaseUrl() = "https://adventure-time-api.herokuapp.com/api/v1/"
 
@@ -43,8 +46,12 @@ class NetworkModule {
             .baseUrl(provideBaseUrl())
             .build()
 
+    /**
+     * @TODO 테스트용
+     * */
     @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): TestApiService =
         retrofit.create(TestApiService::class.java)
+
 }

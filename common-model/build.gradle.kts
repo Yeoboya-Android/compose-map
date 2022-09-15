@@ -1,5 +1,3 @@
-import Libs.implementationDependencies
-
 plugins {
     id(ProjectPlugins.ANDROID_LIBRARY)
     id(ProjectPlugins.JETBRAINS_ANDROID)
@@ -32,21 +30,4 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libs.Versions.COMPOSE_VERSION
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-}
-
-dependencies {
-    implementation(project(Modules.COMMON_MODEL))
-    implementation(project(Modules.COMMON_UI))
-    implementationDependencies(Modules.COMMON_UTIL)
 }

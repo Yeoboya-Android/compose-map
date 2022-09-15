@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementationDependencies(Modules.CORE_NETWORK)
+    implementation(project(Modules.COMMON_MODEL))
 }
 
 kapt {

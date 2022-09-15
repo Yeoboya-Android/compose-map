@@ -1,6 +1,9 @@
-package kr.co.inforexseoul.core_network.service.model
+package kr.co.inforexseoul.common_model.test_model
 
-data class CharacterInfo(
+/**
+ * @TODO 테스트용
+ * */
+data class TestDataModel(
     val id: Int = 0,
     val slug: String = "",
     val displayName: String = "",

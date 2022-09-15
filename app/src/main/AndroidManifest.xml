@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="kr.co.inforexseoul.compose_map">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"

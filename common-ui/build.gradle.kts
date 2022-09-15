@@ -32,6 +32,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Libs.Versions.COMPOSE_VERSION
+    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -41,4 +47,5 @@ android {
 
 dependencies {
     implementationDependencies(Modules.COMMON_UI)
+    implementation(project(Modules.COMMON_MODEL))
 }

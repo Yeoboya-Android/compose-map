@@ -55,6 +55,7 @@ dependencies {
     implementation(project(Modules.CORE_DATA))
     implementation(project(Modules.COMMON_UI))
     implementation(project(Modules.COMMON_UTIL))
+    implementation(project(Modules.COMMON_MODEL))
 }
 
 kapt {

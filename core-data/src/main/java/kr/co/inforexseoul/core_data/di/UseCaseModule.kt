@@ -1,19 +1,24 @@
 package kr.co.inforexseoul.core_data.di
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.co.inforexseoul.core_data.repository.TestRepository
 import kr.co.inforexseoul.core_data.usecase.GetTestDataUseCase
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface UseCaseModule {
+class UseCaseModule {
 
-    @Binds
-    fun bindsGetTestDataUseCase(
+    /**
+     * @TODO 테스트용
+     * */
+    @Provides
+    @Singleton
+    fun provideGetTestDataUseCase(
         testRepository: TestRepository
-    ): GetTestDataUseCase
+    ): GetTestDataUseCase = GetTestDataUseCase(testRepository)
 
 }

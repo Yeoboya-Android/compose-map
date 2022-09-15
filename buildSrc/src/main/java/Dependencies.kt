@@ -17,7 +17,7 @@ object Libs {
         const val RETROFIT_VERSION = "2.9.0"
         const val OK_HTTP4_VERSION = "4.10.0"
         const val ROOM_VERSION = "2.4.3"
-        const val HILT_VERSION = "2.38.1"
+        const val HILT_VERSION = "2.40.5"
     }
 
     object Hilt {
@@ -105,6 +105,7 @@ object Libs {
             TestImplementation(Test.JUNIT)
         )
 
+    /** common-ui 모듈 의존성 주입 */
     private val commonUiDependencies: List<DependencyType>
         get() = listOf(
             /* 컴포즈 */
@@ -114,6 +115,12 @@ object Libs {
             AndroidTestImplementation(Androidx.COMPOSE_JUNIT),
             DebugImplementation(Androidx.COMPOSE_UI_TOOLING),
             DebugImplementation(Androidx.COMPOSE_MANIFEST),
+        )
+
+    /** common-util 모듈 의존성 주입 */
+    private val commonUtilDependencies: List<DependencyType>
+        get() = listOf(
+            Implementation(Androidx.COMPOSE_ACTIVITY),
         )
 
     /** core-network 모듈 의존성 주입 */
@@ -168,7 +175,8 @@ object Libs {
         when (module) {
             Modules.APP -> appDependencies
             Modules.COMMON_UI -> commonUiDependencies
-            Modules.COMMON_UTIL -> null
+            Modules.COMMON_UTIL -> commonUtilDependencies
+            Modules.COMMON_MODEL -> null
             Modules.CORE_NETWORK -> networkDependencies
             Modules.CORE_DATABASE -> dataBaseDependencies
             Modules.CORE_DATA -> dataDependencies
