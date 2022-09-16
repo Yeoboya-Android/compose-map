@@ -5,7 +5,7 @@ import kr.co.inforexseoul.core_data.state.resultFlow
 import javax.inject.Inject
 
 /**
- * @TODO 테스트용
+ * TODO 테스트용
  * */
 class GetTestDataUseCase @Inject constructor(
     private val testRepository: TestRepository

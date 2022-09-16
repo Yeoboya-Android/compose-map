@@ -1,4 +1,4 @@
-package kr.co.inforexseoul.common_util
+package kr.co.inforexseoul.common_util.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable

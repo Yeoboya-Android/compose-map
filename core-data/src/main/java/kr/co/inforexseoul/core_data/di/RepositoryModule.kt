@@ -12,7 +12,7 @@ import kr.co.inforexseoul.core_data.repository.TestRepositoryImpl
 interface RepositoryModule {
 
     /**
-     * @TODO 테스트용
+     * TODO 테스트용
      * */
     @Binds
     fun bindsTestRepository(

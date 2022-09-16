@@ -13,11 +13,11 @@ import javax.inject.Singleton
 class UseCaseModule {
 
     /**
-     * @TODO 테스트용
+     * TODO 테스트용
      * */
     @Provides
     @Singleton
-    fun provideGetTestDataUseCase(
+    fun providesGetTestDataUseCase(
         testRepository: TestRepository
     ): GetTestDataUseCase = GetTestDataUseCase(testRepository)
 

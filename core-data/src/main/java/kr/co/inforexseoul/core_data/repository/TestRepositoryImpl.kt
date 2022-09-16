@@ -6,7 +6,7 @@ import kr.co.inforexseoul.core_network.datasource.TestRemoteDataSource
 import javax.inject.Inject
 
 /**
- * @TODO 테스트용
+ * TODO 테스트용
  * */
 class TestRepositoryImpl @Inject constructor(
     private val testRemoteDataSource: TestRemoteDataSource

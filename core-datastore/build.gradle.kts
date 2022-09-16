@@ -36,11 +36,9 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.CORE_DATABASE))
-    implementation(project(Modules.CORE_NETWORK))
+    implementationDependencies(Modules.CORE_DATASTORE)
     implementation(project(Modules.COMMON_MODEL))
     implementation(project(Modules.COMMON_UTIL))
-    implementationDependencies(Modules.CORE_DATA)
 }
 
 kapt {

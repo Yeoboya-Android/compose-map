@@ -54,6 +54,10 @@ object Libs {
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:3.4.0"
     }
 
+    internal object Coil {
+        const val COIL = "io.coil-kt:coil-compose:2.0.0"
+    }
+
     internal object NetWork {
         const val OKHTTP4 = "com.squareup.okhttp3:okhttp:$OK_HTTP4_VERSION"
         const val RETROFIT2 = "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
@@ -112,6 +116,7 @@ object Libs {
             Api(Androidx.COMPOSE_UI),
             Api(Androidx.COMPOSE_MATERIAL),
             Api(Androidx.COMPOSE_PREVIEW),
+            Api(Coil.COIL),
             AndroidTestImplementation(Androidx.COMPOSE_JUNIT),
             DebugImplementation(Androidx.COMPOSE_UI_TOOLING),
             DebugImplementation(Androidx.COMPOSE_MANIFEST),
@@ -120,11 +125,30 @@ object Libs {
     /** common-util 모듈 의존성 주입 */
     private val commonUtilDependencies: List<DependencyType>
         get() = listOf(
+            /* 힐트 */
+            Implementation(Hilt.HILT_ANDROID),
+            Kapt(Hilt.HILT_ANDROID_COMPILER),
+
+            /* 컴포즈 */
             Implementation(Androidx.COMPOSE_ACTIVITY),
         )
 
+    /** core-datastore 모듈 의존성 주입 */
+    private val coreDataStoreDependencies: List<DependencyType>
+        get() = listOf(
+            /* 힐트 */
+            Implementation(Hilt.HILT_ANDROID),
+            Kapt(Hilt.HILT_ANDROID_COMPILER),
+
+            /* 코루틴 */
+            Implementation(JetBrains.COROUTINE_ANDROID),
+            Implementation(JetBrains.COROUTINE_CORE),
+
+            Implementation(Google.GSON),
+        )
+
     /** core-network 모듈 의존성 주입 */
-    private val networkDependencies: List<DependencyType>
+    private val coreNetworkDependencies: List<DependencyType>
         get() = listOf(
             /* 힐트 */
             Implementation(Hilt.HILT_ANDROID),
@@ -142,7 +166,7 @@ object Libs {
         )
 
     /** core-database 모듈 의존성 주입 */
-    private val dataBaseDependencies: List<DependencyType>
+    private val coreDataBaseDependencies: List<DependencyType>
         get() = listOf(
             /* 힐트 */
             Implementation(Hilt.HILT_ANDROID),
@@ -160,7 +184,7 @@ object Libs {
         )
 
     /** core-data 모듈 의존성 주입 */
-    private val dataDependencies: List<DependencyType>
+    private val coreDataDependencies: List<DependencyType>
         get() = listOf(
             /* 힐트 */
             Implementation(Hilt.HILT_ANDROID),
@@ -177,9 +201,10 @@ object Libs {
             Modules.COMMON_UI -> commonUiDependencies
             Modules.COMMON_UTIL -> commonUtilDependencies
             Modules.COMMON_MODEL -> null
-            Modules.CORE_NETWORK -> networkDependencies
-            Modules.CORE_DATABASE -> dataBaseDependencies
-            Modules.CORE_DATA -> dataDependencies
+            Modules.CORE_DATASTORE -> coreDataStoreDependencies
+            Modules.CORE_NETWORK -> coreNetworkDependencies
+            Modules.CORE_DATABASE -> coreDataBaseDependencies
+            Modules.CORE_DATA -> coreDataDependencies
             else -> null
         }?.onEach { dependencyType ->
             val notation = when (dependencyType) {

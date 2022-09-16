@@ -4,7 +4,6 @@ plugins {
     id(ProjectPlugins.ANDROID_APPLICATION)
     id(ProjectPlugins.JETBRAINS_ANDROID)
     id(ProjectPlugins.HILT_GRADLE)
-
     kotlin(ProjectPlugins.KAPT)
 }
 

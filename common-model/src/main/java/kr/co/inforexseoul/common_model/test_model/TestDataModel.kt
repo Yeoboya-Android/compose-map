@@ -1,7 +1,7 @@
 package kr.co.inforexseoul.common_model.test_model
 
 /**
- * @TODO 테스트용
+ * TODO 테스트용
  * */
 data class TestDataModel(
     val id: Int = 0,

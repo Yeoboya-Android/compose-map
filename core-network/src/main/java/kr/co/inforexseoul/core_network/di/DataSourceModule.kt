@@ -12,7 +12,7 @@ import kr.co.inforexseoul.core_network.datasource.TestRemoteDataSourceImpl
 interface DataSourceModule {
 
     /**
-     * @TODO 테스트용
+     * TODO 테스트용
      * */
     @Binds
     fun bindsTestRemoteDataSource(

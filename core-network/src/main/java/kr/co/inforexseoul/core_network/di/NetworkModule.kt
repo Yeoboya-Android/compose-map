@@ -19,14 +19,14 @@ import javax.inject.Singleton
 object NetworkModule {
 
     /**
-     * @TODO 테스트용
+     * TODO 테스트용
      * */
     @Provides
-    fun provideBaseUrl() = "https://adventure-time-api.herokuapp.com/api/v1/"
+    fun providesBaseUrl() = "https://adventure-time-api.herokuapp.com/api/v1/"
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun providesOkHttpClient(): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -37,21 +37,21 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
             .addCallAdapterFactory(FlowCallAdapterFactory())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .baseUrl(provideBaseUrl())
+            .baseUrl(providesBaseUrl())
             .build()
 
     /**
-     * @TODO 테스트용
+     * TODO 테스트용
      * */
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): TestApiService =
+    fun providesApiService(retrofit: Retrofit): TestApiService =
         retrofit.create(TestApiService::class.java)
 
 }

@@ -3,6 +3,7 @@ import Libs.implementationDependencies
 plugins {
     id(ProjectPlugins.ANDROID_LIBRARY)
     id(ProjectPlugins.JETBRAINS_ANDROID)
+    id(ProjectPlugins.HILT_GRADLE)
     kotlin(ProjectPlugins.KAPT)
 }
 
@@ -49,4 +50,8 @@ dependencies {
     implementation(project(Modules.COMMON_MODEL))
     implementation(project(Modules.COMMON_UI))
     implementationDependencies(Modules.COMMON_UTIL)
+}
+
+kapt {
+    correctErrorTypes = true
 }
