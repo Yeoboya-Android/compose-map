@@ -1,5 +1,3 @@
-import Libs.implementationDependencies
-
 plugins {
     id(ProjectPlugins.ANDROID_APPLICATION)
     id(ProjectPlugins.JETBRAINS_ANDROID)

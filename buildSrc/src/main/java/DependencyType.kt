@@ -1,0 +1,7 @@
+internal sealed class DependencyType(open val dependency: String)
+internal data class Implementation(override val dependency: String) : DependencyType(dependency)
+internal data class Api(override val dependency: String) : DependencyType(dependency)
+internal data class TestImplementation(override val dependency: String) : DependencyType(dependency)
+internal data class AndroidTestImplementation(override val dependency: String) : DependencyType(dependency)
+internal data class DebugImplementation(override val dependency: String) : DependencyType(dependency)
+internal data class Kapt(override val dependency: String) : DependencyType(dependency)
