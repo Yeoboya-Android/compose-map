@@ -4,7 +4,10 @@ import Libs.Versions.HILT_VERSION
 import Libs.Versions.OK_HTTP4_VERSION
 import Libs.Versions.RETROFIT_VERSION
 import Libs.Versions.ROOM_VERSION
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.kotlin.dsl.configure
 
 object Libs {
 
