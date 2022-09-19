@@ -1,6 +1,8 @@
+import Libs.Versions.ANDROID_GRADLE_VERSION
 import Libs.Versions.COMPOSE_VERSION
 import Libs.Versions.COROUTINE_VERSION
 import Libs.Versions.HILT_VERSION
+import Libs.Versions.KOTLIN_VERSION
 import Libs.Versions.OK_HTTP4_VERSION
 import Libs.Versions.RETROFIT_VERSION
 import Libs.Versions.ROOM_VERSION
@@ -69,14 +71,16 @@ object Libs {
         const val ADAPTER_COROUTINE = "tech.thdev:flow-call-adapter-factory:1.0.0"
     }
 
-    internal object JetBrains {
-        const val COROUTINE_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINE_VERSION"
-        const val COROUTINE_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINE_VERSION"
-        const val COROUTINE_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINE_VERSION"
+    object JetBrains {
+        internal const val COROUTINE_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINE_VERSION"
+        internal const val COROUTINE_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINE_VERSION"
+        internal const val COROUTINE_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINE_VERSION"
+        const val KOTLIN_GRADLE = "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
     }
 
-    internal object Google {
-        const val GSON = "com.google.code.gson:gson:2.8.6"
+    object Google {
+        internal const val GSON = "com.google.code.gson:gson:2.8.6"
+        const val ANDROID_BUILD_GRADLE = "com.android.tools.build:gradle:$ANDROID_GRADLE_VERSION"
     }
 
     /** 테스트 라이브러리 */
