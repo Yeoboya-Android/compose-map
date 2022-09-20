@@ -1,4 +1,4 @@
-package kr.co.inforexseoul.common_ui.componets
+package kr.co.inforexseoul.common_ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

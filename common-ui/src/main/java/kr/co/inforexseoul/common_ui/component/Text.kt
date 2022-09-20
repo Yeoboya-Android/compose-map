@@ -1,4 +1,4 @@
-package kr.co.inforexseoul.common_ui.componets
+package kr.co.inforexseoul.common_ui.component
 
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
