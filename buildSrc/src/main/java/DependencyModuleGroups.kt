@@ -18,6 +18,18 @@ internal val appDependencies: List<DependencyType>
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),
         Implementation(Libs.JetBrains.COROUTINE_CORE),
 
+        /* 구글 맵 */
+        Implementation(Libs.GoogleMap.GOOGLE_MAP_COMPOSE),
+        Implementation(Libs.GoogleMap.GOOGLE_MAP_COMPOSE_WIDGET),
+
+        /* 네이버 맵 */
+        Implementation(Libs.NaverMap.NAVER_MAP),
+        Implementation(Libs.NaverMap.NAVER_MAP_COMPOSE),
+
+        /* 플레이 서비스 */
+        Implementation(Libs.GooglePlayServices.PLAY_SERVICES_MAP),
+        Implementation(Libs.GooglePlayServices.PLAY_SERVICES_LOCATION),
+
         Implementation(Libs.Androidx.LIFECYCLE_RUNTIME),
         Implementation(Libs.Androidx.CORE),
         Implementation(Libs.Google.GSON),
@@ -50,6 +62,10 @@ internal val commonUtilDependencies: List<DependencyType>
 
         /* 컴포즈 */
         Implementation(Libs.Androidx.COMPOSE_ACTIVITY),
+
+        /* 권한 */
+        Implementation(Libs.Permission.PERMISSION),
+        Implementation(Libs.Permission.PERMISSION_APPCOMPAT)
     )
 
 /** core-datastore 모듈 의존성 주입 */

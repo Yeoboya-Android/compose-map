@@ -4,6 +4,8 @@
     package="kr.co.inforexseoul.compose_map">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".MyApplication"
@@ -16,6 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Compose_map"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${CLIENT_ID}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

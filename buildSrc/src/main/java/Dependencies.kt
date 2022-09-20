@@ -1,6 +1,7 @@
 import Libs.Versions.ANDROID_GRADLE_VERSION
 import Libs.Versions.COMPOSE_VERSION
 import Libs.Versions.COROUTINE_VERSION
+import Libs.Versions.GOOGLE_MAP_VERSION
 import Libs.Versions.HILT_VERSION
 import Libs.Versions.KOTLIN_VERSION
 import Libs.Versions.OK_HTTP4_VERSION
@@ -23,6 +24,7 @@ object Libs {
         const val OK_HTTP4_VERSION = "4.10.0"
         const val ROOM_VERSION = "2.4.3"
         const val HILT_VERSION = "2.40.5"
+        const val GOOGLE_MAP_VERSION = "2.7.0"
     }
 
     object Hilt {
@@ -81,6 +83,30 @@ object Libs {
     object Google {
         internal const val GSON = "com.google.code.gson:gson:2.8.6"
         const val ANDROID_BUILD_GRADLE = "com.android.tools.build:gradle:$ANDROID_GRADLE_VERSION"
+    }
+
+    object Secret {
+        const val SECRET_GRADLE_PLUGIN = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
+    }
+
+    object GoogleMap {
+        internal const val GOOGLE_MAP_COMPOSE = "com.google.maps.android:maps-compose:$GOOGLE_MAP_VERSION"
+        internal const val GOOGLE_MAP_COMPOSE_WIDGET = "com.google.maps.android:maps-compose-widgets:$GOOGLE_MAP_VERSION"
+    }
+
+    object NaverMap {
+        internal const val NAVER_MAP_COMPOSE = "io.github.fornewid:naver-map-compose:1.2.1"
+        internal const val NAVER_MAP = "com.naver.maps:map-sdk:3.16.0"
+    }
+
+    object GooglePlayServices {
+        internal const val PLAY_SERVICES_MAP = "com.google.android.gms:play-services-maps:18.1.0"
+        internal const val PLAY_SERVICES_LOCATION = "com.google.android.gms:play-services-location:20.0.0"
+    }
+
+    object Permission {
+        internal const val PERMISSION = "com.google.accompanist:accompanist-permissions:0.24.0-alpha"
+        internal const val PERMISSION_APPCOMPAT = "androidx.appcompat:appcompat:1.4.1"
     }
 
     /** 테스트 라이브러리 */

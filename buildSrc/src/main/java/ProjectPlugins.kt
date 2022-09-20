@@ -3,6 +3,7 @@ object ProjectPlugins {
     const val JETBRAINS_ANDROID = "org.jetbrains.kotlin.android"
     const val HILT_GRADLE = "dagger.hilt.android.plugin"
     const val KAPT = "kapt"
+    const val SECRET_GRADLE = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 
     /** Gradle Convention Plugins */
     const val BASE_PLUGIN = "base-script-plugin"
