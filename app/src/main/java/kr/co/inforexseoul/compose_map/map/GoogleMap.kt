@@ -17,7 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import kr.co.inforexseoul.common_ui.theme.Compose_mapTheme
+import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
@@ -29,7 +29,7 @@ private const val TAG = "GoogleMap"
  */
 @Composable
 fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
-    Compose_mapTheme {
+    MainTheme {
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
         val cameraPositionState = rememberCameraPositionState{
@@ -44,7 +44,7 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
                     isMapLoaded = true
                 },
                 content = {
-                    GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
+                    //GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
                 }
             ){
                 reqLastLocation = true
