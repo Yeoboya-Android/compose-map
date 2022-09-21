@@ -7,7 +7,7 @@ buildscript {
         classpath(Libs.Google.ANDROID_BUILD_GRADLE)
         classpath(Libs.JetBrains.KOTLIN_GRADLE)
         classpath(Libs.Hilt.HILT_GRADLE_PLUGIN)
-        classpath(Libs.Secret.SECRET_GRADLE_PLUGIN)
+        classpath(Libs.Google.SECRET_GRADLE_PLUGIN)
     }
 }
 

@@ -14,18 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.launch
-import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_ui.theme.Compose_mapTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
-import kr.co.inforexseoul.common_util.permission.LOCATION_PERMISSIONS
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
+import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
-import kr.co.inforexseoul.core_data.state.Result
 
 private const val TAG = "GoogleMap"
 
@@ -49,7 +44,7 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
                     isMapLoaded = true
                 },
                 content = {
-                    SetMarkers()
+                    GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
                 }
             ){
                 reqLastLocation = true
@@ -87,7 +82,6 @@ private fun GoogleMapView(
     content : @Composable () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
-
     GoogleMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
@@ -122,29 +116,33 @@ private fun GoogleMapView(
 }
 
 /**
- * 목록으로 마커 찍기
- */
-@Composable
-private fun SetMarkers() {
-    val cameraList = listOf( Pair(35.15, 126.85), Pair(35.16, 126.86), Pair(35.15, 126.83) )
-    cameraList.forEach { point ->
-        Marker(
-            state = rememberMarkerState(position = LatLng(point.first, point.second))
-        )
-    }
-}
-
-/**
  * 현재 위치 가져오기
  */
 @Composable
 private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
     if(reqLastLocation){
-        CheckPermission(permissions = LOCATION_PERMISSIONS) {
+        CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
             called.invoke(getCameraPosition(mapViewModel.presentLocation))
         }
     }
+}
+
+/**
+ * 카메라 범위안에 있는 곳에 마커 찍기
+ */
+@Composable
+private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel: MapViewModel) {
+    if(!cameraPositionState.isMoving) {
+        mapViewModel.stationMap.forEach {
+            val position = LatLng(it.value.first, it.value.second)
+            if(cameraPositionState.projection!!.visibleRegion.latLngBounds.contains(position)) {
+                Marker(rememberMarkerState(position = position))
+            }
+        }
+    }
+
+
 }
 
 private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {

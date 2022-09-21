@@ -20,16 +20,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_util.permission.CheckPermission
-import kr.co.inforexseoul.common_util.permission.LOCATION_PERMISSIONS
+import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
-import kr.co.inforexseoul.compose_map.BuildConfig
 import kr.co.inforexseoul.core_data.state.Result
 
 @Composable
 fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
     var mapState by remember { mutableStateOf<MapState>(MapState.GoogleMap) }
 
-    CheckPermission(permissions = LOCATION_PERMISSIONS) {
+    CheckPermission(permissions = locationPermissions) {
         mapViewModel.requestLocation()
     }
 
@@ -135,8 +134,8 @@ fun GetBusStationInfo(mapViewModel : MapViewModel) {
         is Result.Loading -> Unit
         is Result.Success -> {
             Log.d("123123", "데이터 가져오기 성공 : ${(result as Result.Success<BusStationInfo>).data}")
-            val list = (result as Result.Success<BusStationInfo>).data.stationList
-
+            mapViewModel.stationList = (result as Result.Success<BusStationInfo>).data.stationList
+            mapViewModel.stationListToMap()
         }
     }
 }

@@ -53,6 +53,7 @@ object Libs {
         const val ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
         const val ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
 
+        const val PERMISSION_APPCOMPAT = "androidx.appcompat:appcompat:1.4.1"
         const val LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
         const val CORE = "androidx.core:core-ktx:1.7.0"
 
@@ -83,30 +84,18 @@ object Libs {
     object Google {
         internal const val GSON = "com.google.code.gson:gson:2.8.6"
         const val ANDROID_BUILD_GRADLE = "com.android.tools.build:gradle:$ANDROID_GRADLE_VERSION"
-    }
-
-    object Secret {
+        const val GOOGLE_MAP_COMPOSE = "com.google.maps.android:maps-compose:$GOOGLE_MAP_VERSION"
+        const val GOOGLE_MAP_COMPOSE_WIDGET = "com.google.maps.android:maps-compose-widgets:$GOOGLE_MAP_VERSION"
+        const val GOOGLE_MAP_UTIL = "com.google.maps.android:android-maps-utils:2.3.0"
+        const val PLAY_SERVICES_MAP = "com.google.android.gms:play-services-maps:18.1.0"
+        const val PLAY_SERVICES_LOCATION = "com.google.android.gms:play-services-location:20.0.0"
+        const val PERMISSION = "com.google.accompanist:accompanist-permissions:0.24.0-alpha"
         const val SECRET_GRADLE_PLUGIN = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
     }
 
-    object GoogleMap {
-        internal const val GOOGLE_MAP_COMPOSE = "com.google.maps.android:maps-compose:$GOOGLE_MAP_VERSION"
-        internal const val GOOGLE_MAP_COMPOSE_WIDGET = "com.google.maps.android:maps-compose-widgets:$GOOGLE_MAP_VERSION"
-    }
-
-    object NaverMap {
+    object Naver {
         internal const val NAVER_MAP_COMPOSE = "io.github.fornewid:naver-map-compose:1.2.1"
         internal const val NAVER_MAP = "com.naver.maps:map-sdk:3.16.0"
-    }
-
-    object GooglePlayServices {
-        internal const val PLAY_SERVICES_MAP = "com.google.android.gms:play-services-maps:18.1.0"
-        internal const val PLAY_SERVICES_LOCATION = "com.google.android.gms:play-services-location:20.0.0"
-    }
-
-    object Permission {
-        internal const val PERMISSION = "com.google.accompanist:accompanist-permissions:0.24.0-alpha"
-        internal const val PERMISSION_APPCOMPAT = "androidx.appcompat:appcompat:1.4.1"
     }
 
     /** 테스트 라이브러리 */

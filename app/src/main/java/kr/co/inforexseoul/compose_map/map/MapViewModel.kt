@@ -9,6 +9,8 @@ import com.google.android.gms.location.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kr.co.inforexseoul.common_model.test_model.BusStationInfo
+import kr.co.inforexseoul.common_model.test_model.StationInfo
 import kr.co.inforexseoul.compose_map.BuildConfig
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_data.usecase.GetBusStationDataUseCase
@@ -25,6 +27,16 @@ class MapViewModel @Inject constructor(
 
     // default - 완도
     var presentLocation = Pair(34.28, 126.74)
+    // 정류장 리스트
+    var stationList : List<StationInfo> = listOf()
+    // 위도 경도 리스트
+    val stationMap : HashMap<Int, Pair<Double, Double>> = HashMap()
+
+    fun stationListToMap() {
+        stationList.forEachIndexed { index, info ->
+            stationMap[index] = Pair(info.latitude, info.longitude)
+        }
+    }
 
     fun requestLocation() {
         if(!this::fusedLocationProviderClient.isInitialized) {
