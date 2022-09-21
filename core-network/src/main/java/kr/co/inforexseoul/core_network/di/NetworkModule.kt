@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.co.inforexseoul.core_network.service.TestApiService
+import kr.co.inforexseoul.core_network.service.MapApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,10 +19,10 @@ import javax.inject.Singleton
 object NetworkModule {
 
     /**
-     * TODO 테스트용
+     * TODO 버스 API용
      * */
     @Provides
-    fun providesBaseUrl() = "https://adventure-time-api.herokuapp.com/api/v1/"
+    fun providesBaseUrl() = "http://api.gwangju.go.kr/"
 
     @Singleton
     @Provides
@@ -46,12 +46,9 @@ object NetworkModule {
             .baseUrl(providesBaseUrl())
             .build()
 
-    /**
-     * TODO 테스트용
-     * */
     @Singleton
     @Provides
-    fun providesApiService(retrofit: Retrofit): TestApiService =
-        retrofit.create(TestApiService::class.java)
+    fun providesApiService(retrofit: Retrofit): MapApiService =
+        retrofit.create(MapApiService::class.java)
 
 }

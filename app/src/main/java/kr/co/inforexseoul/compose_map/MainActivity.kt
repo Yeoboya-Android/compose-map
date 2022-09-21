@@ -15,7 +15,7 @@ import kr.co.inforexseoul.common_ui.theme.Compose_mapTheme
 import kr.co.inforexseoul.compose_map.map.MapScreen
 
 @AndroidEntryPoint
-class MainActivity() : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,6 @@ class MainActivity() : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     MapScreen()
-                    //TestScreen()
                 }
             }
         }

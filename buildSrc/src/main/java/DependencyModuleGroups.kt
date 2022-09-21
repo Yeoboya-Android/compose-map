@@ -68,6 +68,12 @@ internal val commonUtilDependencies: List<DependencyType>
         Implementation(Libs.Permission.PERMISSION_APPCOMPAT)
     )
 
+/** common-model 모듈 의존성 주입 */
+internal val commonModelDependencies : List<DependencyType>
+    get() = listOf(
+        Implementation(Libs.Google.GSON)
+    )
+
 /** core-datastore 모듈 의존성 주입 */
 internal val coreDataStoreDependencies: List<DependencyType>
     get() = listOf(

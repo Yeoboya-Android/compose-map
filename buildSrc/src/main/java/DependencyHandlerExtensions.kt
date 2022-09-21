@@ -5,13 +5,13 @@ fun DependencyHandler.implementationDependencies(module: String) {
         Modules.APP -> appDependencies
         Modules.COMMON_UI -> commonUiDependencies
         Modules.COMMON_UTIL -> commonUtilDependencies
-        Modules.COMMON_MODEL -> null
+        Modules.COMMON_MODEL -> commonModelDependencies
         Modules.CORE_DATASTORE -> coreDataStoreDependencies
         Modules.CORE_NETWORK -> coreNetworkDependencies
         Modules.CORE_DATABASE -> coreDataBaseDependencies
         Modules.CORE_DATA -> coreDataDependencies
         else -> error("Not Found Module: $module")
-    }?.forEach { dependencyType ->
+    }.forEach { dependencyType ->
         val notation = when (dependencyType) {
             is AndroidTestImplementation -> "androidTestImplementation"
             is DebugImplementation -> "debugImplementation"

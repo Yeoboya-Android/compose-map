@@ -1,5 +1,6 @@
 package kr.co.inforexseoul.compose_map.map
 
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,8 +18,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.LOCATION_PERMISSIONS
+import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
+import kr.co.inforexseoul.compose_map.BuildConfig
+import kr.co.inforexseoul.core_data.state.Result
 
 @Composable
 fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
@@ -32,6 +37,7 @@ fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
         mapState = selectedState
     }
 
+    GetBusStationInfo(mapViewModel)
 }
 
 /**
@@ -114,6 +120,23 @@ private fun CustomToggleGroup(
                         )
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun GetBusStationInfo(mapViewModel : MapViewModel) {
+    val result by mapViewModel.busStationState.collectAsStateWithLifecycle(initial = Result.Loading)
+
+    when(result) {
+        is Result.Error -> {
+            Log.d("123123", "api call Error ${(result as Result.Error).error}")
+        }
+        is Result.Loading -> Unit
+        is Result.Success -> {
+            Log.d("123123", "데이터 가져오기 성공 : ${(result as Result.Success<BusStationInfo>).data}")
+            val list = (result as Result.Success<BusStationInfo>).data.stationList
+
         }
     }
 }

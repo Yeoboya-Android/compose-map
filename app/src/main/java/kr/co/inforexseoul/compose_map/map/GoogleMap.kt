@@ -19,10 +19,13 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
+import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_ui.theme.Compose_mapTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.LOCATION_PERMISSIONS
+import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
+import kr.co.inforexseoul.core_data.state.Result
 
 private const val TAG = "GoogleMap"
 
@@ -32,7 +35,6 @@ private const val TAG = "GoogleMap"
 @Composable
 fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
     Compose_mapTheme {
-
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
         val cameraPositionState = rememberCameraPositionState{
@@ -69,8 +71,10 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
         }
 
         GetPresentLocation(reqLastLocation, mapViewModel) {
+            cameraPositionState.position = it
             reqLastLocation = false
         }
+
     }
 }
 
@@ -104,7 +108,6 @@ private fun GoogleMapView(
         horizontalArrangement = Arrangement.Start,
         modifier = modifier.padding(10.dp)
     ) {
-
         Button(
             colors = ButtonDefaults.buttonColors(Color.White),
             onClick = onClick
@@ -114,49 +117,8 @@ private fun GoogleMapView(
                 contentDescription = "presentLocation"
             )
         }
-        val coroutineScope = rememberCoroutineScope()
-        ZoomControls(
-            onZoomOut = {
-                coroutineScope.launch {
-                    cameraPositionState.animate(CameraUpdateFactory.zoomOut())
-                }
-            },
-            onZoomIn = {
-                coroutineScope.launch {
-                    cameraPositionState.animate(CameraUpdateFactory.zoomIn())
-                }
-            }
-        )
     }
 
-}
-
-
-@Composable
-private fun MapButton(
-    text : String,
-    onClick : () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        modifier = modifier.padding(4.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.onPrimary,
-            contentColor = MaterialTheme.colors.primary
-        ),
-        onClick = onClick
-    ) {
-        Text(text = text, style = MaterialTheme.typography.body1)
-    }
-}
-
-@Composable
-private fun ZoomControls(
-    onZoomOut : () -> Unit,
-    onZoomIn : () -> Unit,
-){
-  MapButton("-", onClick = { onZoomOut() })
-  MapButton("+", onClick = { onZoomIn() })
 }
 
 /**
@@ -172,13 +134,15 @@ private fun SetMarkers() {
     }
 }
 
+/**
+ * 현재 위치 가져오기
+ */
 @Composable
-private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : () -> Unit) {
+private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
     if(reqLastLocation){
         CheckPermission(permissions = LOCATION_PERMISSIONS) {
             mapViewModel.requestLocation()
-            getCameraPosition(mapViewModel.presentLocation)
-            called.invoke()
+            called.invoke(getCameraPosition(mapViewModel.presentLocation))
         }
     }
 }
