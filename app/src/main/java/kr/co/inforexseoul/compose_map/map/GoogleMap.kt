@@ -1,6 +1,7 @@
 package kr.co.inforexseoul.compose_map.map
 
 import android.util.Log
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
@@ -11,9 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
@@ -44,7 +48,7 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
                     isMapLoaded = true
                 },
                 content = {
-                    //GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
+                    GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
                 }
             ){
                 reqLastLocation = true
@@ -134,15 +138,18 @@ private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewM
 @Composable
 private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel: MapViewModel) {
     if(!cameraPositionState.isMoving) {
+        val context = LocalContext.current
+        val bitmapDrawable = AppCompatResources.getDrawable(context, R.drawable.bus_station)?.toBitmap()
         mapViewModel.stationMap.forEach {
             val position = LatLng(it.value.first, it.value.second)
             if(cameraPositionState.projection!!.visibleRegion.latLngBounds.contains(position)) {
-                Marker(rememberMarkerState(position = position))
+                Marker(
+                    state = rememberMarkerState(position = position),
+                    icon = BitmapDescriptorFactory.fromBitmap(bitmapDrawable!!)
+                )
             }
         }
     }
-
-
 }
 
 private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
