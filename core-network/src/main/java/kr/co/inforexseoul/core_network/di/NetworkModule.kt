@@ -21,8 +21,7 @@ object NetworkModule {
     /**
      * TODO 버스 API용
      * */
-    @Provides
-    fun providesBaseUrl() = "http://api.gwangju.go.kr/"
+    private const val baseUrlMap = "http://api.gwangju.go.kr/"
 
     @Singleton
     @Provides
@@ -37,18 +36,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    fun providesRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder =
         Retrofit.Builder()
             .client(okHttpClient)
             .addCallAdapterFactory(FlowCallAdapterFactory())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .baseUrl(providesBaseUrl())
-            .build()
 
     @Singleton
     @Provides
-    fun providesApiService(retrofit: Retrofit): MapApiService =
-        retrofit.create(MapApiService::class.java)
+    fun providesMapApiService(retrofit: Retrofit.Builder): MapApiService =
+        retrofit.baseUrl(baseUrlMap).build().create(MapApiService::class.java)
 
 }
