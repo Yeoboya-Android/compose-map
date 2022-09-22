@@ -1,5 +1,6 @@
 package kr.co.inforexseoul.compose_map.map
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -9,7 +10,6 @@ import com.google.android.gms.location.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_model.test_model.StationInfo
 import kr.co.inforexseoul.compose_map.BuildConfig
 import kr.co.inforexseoul.core_data.state.Result
@@ -38,6 +38,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    @SuppressLint("MissingPermission")
     fun requestLocation() {
         if(!this::fusedLocationProviderClient.isInitialized) {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
@@ -59,8 +60,23 @@ class MapViewModel @Inject constructor(
             }
         }
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-            Log.d("123123", "latitude : ${location.latitude}, longitude : ${location.longitude}")
-            presentLocation = Pair(location.latitude, location.longitude)
+            if (location != null) {
+                Log.d("123123", "latitude : ${location.latitude}, longitude : ${location.longitude}")
+                presentLocation = Pair(location.latitude, location.longitude)
+            } else {
+                val locationRequest = LocationRequest.create().apply {
+                    interval = 1000
+                    priority = Priority.PRIORITY_HIGH_ACCURACY
+                }
+                val locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        val lastLocation = locationResult.lastLocation ?: return
+                        Log.d("123123", "v2 latitude : ${lastLocation.latitude}, longitude : ${lastLocation.longitude}")
+                        presentLocation = Pair(lastLocation.latitude, lastLocation.longitude)
+                    }
+                }
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+            }
         }
     }
 

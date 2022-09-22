@@ -48,6 +48,8 @@ internal val commonUiDependencies: List<DependencyType>
         Api(Libs.Androidx.COMPOSE_UI),
         Api(Libs.Androidx.COMPOSE_MATERIAL),
         Api(Libs.Androidx.COMPOSE_PREVIEW),
+        Api(Libs.Androidx.COMPOSE_RUNTIME),
+        Api(Libs.Androidx.COMPOSE_COMPILER),
         Api(Libs.Coil.COIL),
         AndroidTestImplementation(Libs.Androidx.COMPOSE_JUNIT),
         DebugImplementation(Libs.Androidx.COMPOSE_UI_TOOLING),
