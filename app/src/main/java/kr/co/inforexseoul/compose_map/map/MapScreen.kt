@@ -14,21 +14,25 @@ import kr.co.inforexseoul.common_ui.component.CustomToggleGroup
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
+import kr.co.inforexseoul.compose_map.map.google.OpenGoogleMap
+import kr.co.inforexseoul.compose_map.map.naver.OpenNaverMap
 import kr.co.inforexseoul.core_data.state.Result
 
 @Composable
 fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
     var mapState by remember { mutableStateOf<MapState>(MapState.GoogleMap) }
 
-    CheckPermission(permissions = locationPermissions) {
-        mapViewModel.requestLocation()
-    }
+    GetBusStationInfo(mapViewModel){
 
-    ScreenSwitch(mapState) { selectedState ->
-        mapState = selectedState
-    }
+        CheckPermission(permissions = locationPermissions) {
+            mapViewModel.requestLocation()
+        }
 
-    GetBusStationInfo(mapViewModel)
+        ScreenSwitch(mapState) { selectedState ->
+            mapState = selectedState
+        }
+
+    }
 }
 
 /**
@@ -66,7 +70,7 @@ private fun ScreenSwitch(mapState: MapState, selected: (MapState) -> Unit) {
 }
 
 @Composable
-fun GetBusStationInfo(mapViewModel : MapViewModel) {
+fun GetBusStationInfo(mapViewModel : MapViewModel, success : @Composable () -> Unit) {
     val result by mapViewModel.busStationState.collectAsStateWithLifecycle(initial = Result.Loading)
 
     when(result) {
@@ -78,6 +82,7 @@ fun GetBusStationInfo(mapViewModel : MapViewModel) {
             Log.d("123123", "데이터 가져오기 성공 : ${(result as Result.Success<BusStationInfo>).data}")
             mapViewModel.stationList = (result as Result.Success<BusStationInfo>).data.stationList
             mapViewModel.stationListToMap()
+            success.invoke()
         }
     }
 }

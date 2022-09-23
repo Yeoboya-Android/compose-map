@@ -1,4 +1,4 @@
-package kr.co.inforexseoul.compose_map.map
+package kr.co.inforexseoul.compose_map.map.google
 
 import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
@@ -8,13 +8,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -22,39 +19,43 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.compose.*
-import com.naver.maps.map.overlay.OverlayImage
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.compose.*
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
+import kr.co.inforexseoul.compose_map.map.MapViewModel
 
-private const val TAG = "NaverMap"
+private const val TAG = "GoogleMap"
 
 /**
- * 네이버 지도
+ * 구글 지도
  */
 @Composable
-fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
+fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
     MainTheme {
-
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
-        val cameraPositionState : CameraPositionState = rememberCameraPositionState {
+        val cameraPositionState = rememberCameraPositionState{
             position = getCameraPosition(mapViewModel.presentLocation)
         }
 
-        Box(Modifier.fillMaxSize()) {
-            NaverMapView(
+        val items = remember { mutableStateListOf<ClusterData>() }
+        GetAllMarker(mapViewModel = mapViewModel, items = items)
+
+        Box(Modifier.fillMaxSize()){
+            GoogleMapView(
                 modifier = Modifier.matchParentSize(),
                 cameraPositionState = cameraPositionState,
                 onMapLoaded = {
                     isMapLoaded = true
                 },
                 content = {
-                    GetMarkerInCameraBound(cameraPositionState, mapViewModel)
+                    //GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
+                    MapClustering(cameraPositionState = cameraPositionState, items = items)
                 }
             ){
                 reqLastLocation = true
@@ -74,32 +75,36 @@ fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
                 }
             }
         }
+
         GetPresentLocation(reqLastLocation, mapViewModel) {
             cameraPositionState.position = it
             reqLastLocation = false
         }
+
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun NaverMapView(
+private fun GoogleMapView(
     modifier: Modifier = Modifier,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     onMapLoaded : () -> Unit = {},
     content : @Composable () -> Unit = {},
-    onClick : () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
-    NaverMap(
+    GoogleMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
-        properties = MapProperties(mapType = MapType.Basic),
-        uiSettings = MapUiSettings(isCompassEnabled = false),
+        properties = MapProperties(mapType = MapType.NORMAL),
+        uiSettings = MapUiSettings(compassEnabled = false),
         onMapLoaded = onMapLoaded,
-        onMapClick = { lat, lng->
-            Log.d(TAG, "Position ${lat}, and ${lng}")
+        onPOIClick = {
+            Log.d(TAG, "POI clicked: ${it.name}")
+        },
+        onMapClick = {
+            Log.d(TAG, "Position ${it.latitude}, and ${it.longitude}")
         }
-    ){
+    ) {
         content()
     }
     Row(
@@ -117,7 +122,6 @@ private fun NaverMapView(
             )
         }
     }
-
 }
 
 /**
@@ -125,7 +129,7 @@ private fun NaverMapView(
  */
 @Composable
 private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
-    if(reqLastLocation) {
+    if(reqLastLocation){
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
             called.invoke(getCameraPosition(mapViewModel.presentLocation))
@@ -136,25 +140,59 @@ private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewM
 /**
  * 카메라 범위안에 있는 곳에 마커 찍기
  */
-@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel : MapViewModel){
+private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel: MapViewModel) {
     if(!cameraPositionState.isMoving) {
         val context = LocalContext.current
         val bitmapDrawable = AppCompatResources.getDrawable(context, R.drawable.bus_station)?.toBitmap()
-        mapViewModel.stationMap.forEach{
+        mapViewModel.stationMap.forEach {
             val position = LatLng(it.value.first, it.value.second)
-            if(cameraPositionState.coveringBounds?.contains(position) == true) {
+            if(cameraPositionState.projection!!.visibleRegion.latLngBounds.contains(position)) {
                 Marker(
                     state = rememberMarkerState(position = position),
-                    icon = OverlayImage.fromBitmap(bitmapDrawable!!)
+                    icon = BitmapDescriptorFactory.fromBitmap(bitmapDrawable!!)
                 )
             }
         }
     }
 }
 
+/**
+ * Map Cluster 용 모든 위치 가져오기
+ */
+@Composable
+private fun GetAllMarker(mapViewModel: MapViewModel, items : SnapshotStateList<ClusterData>) {
+    LaunchedEffect(Unit) {
+        mapViewModel.stationMap.forEach {
+            val position = LatLng(it.value.first, it.value.second)
+            items.add(ClusterData(position, "Marker", "Snippet"))
+        }
+    }
+}
+
+/**
+ * Map Clustering
+ */
+@OptIn(MapsComposeExperimentalApi::class)
+@Composable
+private fun MapClustering(cameraPositionState: CameraPositionState, items : List<ClusterData>) {
+    val context = LocalContext.current
+    var clusterManager by remember { mutableStateOf<ClusterManager<ClusterData>?>(null) }
+    MapEffect(items) { map ->
+        if(clusterManager == null) {
+            clusterManager = ClusterManager<ClusterData>(context, map)
+            val customRenderer = MarkerClusterRenderer(context, map, clusterManager)
+            clusterManager!!.renderer = customRenderer
+        }
+        clusterManager?.addItems(items)
+    }
+    LaunchedEffect(key1 = cameraPositionState.isMoving) {
+        if(!cameraPositionState.isMoving) {
+            clusterManager?.onCameraIdle()
+        }
+    }
+}
 
 private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
-    return CameraPosition(LatLng(location.first, location.second), 15.0)
+    return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
 }
