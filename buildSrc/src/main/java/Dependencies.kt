@@ -45,6 +45,7 @@ object Libs {
         const val COMPOSE_JUNIT = "androidx.compose.ui:ui-test-junit4:$COMPOSE_VERSION"
         const val COMPOSE_RUNTIME = "androidx.compose.runtime:runtime:$COMPOSE_VERSION"
         const val COMPOSE_COMPILER = "androidx.compose.compiler:compiler:1.3.1"
+        const val COMPOSE_SYSTEM_UI = "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
         /** DataBase */
         const val ROOM = "androidx.room:room-ktx:$ROOM_VERSION"
@@ -94,6 +95,10 @@ object Libs {
     object Naver {
         internal const val NAVER_MAP_COMPOSE = "io.github.fornewid:naver-map-compose:1.2.1"
         internal const val NAVER_MAP = "com.naver.maps:map-sdk:3.16.0"
+    }
+
+    object Etc {
+        const val JEXCELAPI = "net.sourceforge.jexcelapi:jxl:2.6.12"
     }
 
     /** 테스트 라이브러리 */

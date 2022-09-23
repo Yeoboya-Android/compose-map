@@ -33,6 +33,10 @@
             android:name="kr.co.inforexseoul.compose_map.map.BUS_KEY"
             android:value="${BUS_KEY}" />
 
+        <meta-data
+            android:name="kr.co.inforexseoul.compose_map.weather.OPEN_WEATHER_MAP_KEY"
+            android:value="${OPEN_WEATHER_MAP_KEY}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

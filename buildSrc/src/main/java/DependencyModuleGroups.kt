@@ -13,6 +13,7 @@ internal val appDependencies: List<DependencyType>
         AndroidTestImplementation(Libs.Androidx.COMPOSE_JUNIT),
         DebugImplementation(Libs.Androidx.COMPOSE_UI_TOOLING),
         DebugImplementation(Libs.Androidx.COMPOSE_MANIFEST),
+        Api(Libs.Coil.COIL),
 
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),
@@ -35,6 +36,8 @@ internal val appDependencies: List<DependencyType>
         Implementation(Libs.Androidx.CORE),
         Implementation(Libs.Google.GSON),
 
+        Implementation(Libs.Etc.JEXCELAPI),
+
         AndroidTestImplementation(Libs.Androidx.JUNIT),
         AndroidTestImplementation(Libs.Androidx.ESPRESSO_CORE),
 
@@ -54,6 +57,7 @@ internal val commonUiDependencies: List<DependencyType>
         AndroidTestImplementation(Libs.Androidx.COMPOSE_JUNIT),
         DebugImplementation(Libs.Androidx.COMPOSE_UI_TOOLING),
         DebugImplementation(Libs.Androidx.COMPOSE_MANIFEST),
+        Implementation(Libs.Androidx.COMPOSE_SYSTEM_UI),
     )
 
 /** common-util 모듈 의존성 주입 */

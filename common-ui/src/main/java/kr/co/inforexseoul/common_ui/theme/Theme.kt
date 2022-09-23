@@ -6,6 +6,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Mint80,
@@ -16,7 +17,7 @@ private val DarkColorPalette = darkColors(
     onSecondary = Mint20,
     background = Grey20,
     onBackground = Grey99,
-    surface = Grey20,
+    surface = Grey80,
     onSurface = Grey99,
     error = Red80,
     onError = Red20,
@@ -47,4 +48,8 @@ fun MainTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
         shapes = Shapes,
         content = content
     )
+
+    rememberSystemUiController().apply {
+        setSystemBarsColor(colors.primary)
+    }
 }
