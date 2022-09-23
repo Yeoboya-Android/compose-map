@@ -25,6 +25,7 @@ class MapViewModel @Inject constructor(
     private val context: Context get() = app.applicationContext
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    val list = listOf("Google Map", "Naver Map")
     // default - 완도
     var presentLocation = Pair(34.28, 126.74)
     // 정류장 리스트

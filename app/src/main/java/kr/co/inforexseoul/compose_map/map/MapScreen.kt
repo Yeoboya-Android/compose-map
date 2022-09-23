@@ -23,15 +23,12 @@ fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
     var mapState by remember { mutableStateOf<MapState>(MapState.GoogleMap) }
 
     GetBusStationInfo(mapViewModel){
-
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
         }
-
-        ScreenSwitch(mapState) { selectedState ->
+        ScreenSwitch(mapViewModel, mapState) { selectedState ->
             mapState = selectedState
         }
-
     }
 }
 
@@ -39,7 +36,7 @@ fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
  *  지도 화면 전환 (Google Map, Naver Map)
  */
 @Composable
-private fun ScreenSwitch(mapState: MapState, selected: (MapState) -> Unit) {
+private fun ScreenSwitch(mapViewModel: MapViewModel, mapState: MapState, selected: (MapState) -> Unit) {
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -53,17 +50,15 @@ private fun ScreenSwitch(mapState: MapState, selected: (MapState) -> Unit) {
             }
         }
 
-        val list = listOf("Google Map", "Naver Map")
         CustomToggleGroup(
-            options = list,
+            options = mapViewModel.list,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(16.dp)
         ) { text ->
-                if (text == list[0]) {
-                    selected(MapState.GoogleMap)
-                } else {
-                    selected(MapState.NaverMap)
+                when(text) {
+                    "Google Map" -> selected(MapState.GoogleMap)
+                    "Naver Map" -> selected(MapState.NaverMap)
                 }
             }
     }

@@ -35,35 +35,36 @@ private const val TAG = "GoogleMap"
  * 구글 지도
  */
 @Composable
-fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
+fun OpenGoogleMap(
+    mapViewModel: MapViewModel = viewModel(),
+    stateHolder : GoogleMapStateHolder = rememberGoogleMapState(
+        isMapLoaded = false,
+        reqLastLocation = false,
+        clusterData = ClusterData(LatLng(0.0, 0.0), "", ""),
+        cameraPositionState = CameraPositionState(position = getCameraPosition(mapViewModel.presentLocation))
+    )
+) {
     MainTheme {
-        var isMapLoaded by remember { mutableStateOf(false) }
-        var reqLastLocation by remember { mutableStateOf(false) }
-        val cameraPositionState = rememberCameraPositionState{
-            position = getCameraPosition(mapViewModel.presentLocation)
-        }
-
-        val items = remember { mutableStateListOf<ClusterData>() }
-        GetAllMarker(mapViewModel = mapViewModel, items = items)
+        GetAllMarker(mapViewModel = mapViewModel, items = stateHolder.items)
 
         Box(Modifier.fillMaxSize()){
             GoogleMapView(
                 modifier = Modifier.matchParentSize(),
-                cameraPositionState = cameraPositionState,
+                cameraPositionState = stateHolder.cameraPositionState,
                 onMapLoaded = {
-                    isMapLoaded = true
+                    stateHolder.isMapLoaded = true
                 },
                 content = {
                     //GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
-                    MapClustering(cameraPositionState = cameraPositionState, items = items)
+                    MapClustering(cameraPositionState = stateHolder.cameraPositionState, items = stateHolder.items)
                 }
             ){
-                reqLastLocation = true
+                stateHolder.reqLastLocation = true
             }
-            if(!isMapLoaded) {
+            if(!stateHolder.isMapLoaded) {
                 AnimatedVisibility(
                     modifier = Modifier.matchParentSize(),
-                    visible = !isMapLoaded,
+                    visible = !stateHolder.isMapLoaded,
                     enter = EnterTransition.None,
                     exit = fadeOut()
                 ) {
@@ -76,9 +77,9 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
             }
         }
 
-        GetPresentLocation(reqLastLocation, mapViewModel) {
-            cameraPositionState.position = it
-            reqLastLocation = false
+        GetPresentLocation(stateHolder.reqLastLocation, mapViewModel) {
+            stateHolder.cameraPositionState.position = it
+            stateHolder.reqLastLocation = false
         }
 
     }
@@ -195,4 +196,16 @@ private fun MapClustering(cameraPositionState: CameraPositionState, items : List
 
 private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
     return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
+}
+
+@Composable
+private fun rememberGoogleMapState(
+    isMapLoaded : Boolean,
+    reqLastLocation : Boolean,
+    clusterData: ClusterData,
+    cameraPositionState: CameraPositionState
+) : GoogleMapStateHolder {
+    return remember(isMapLoaded, reqLastLocation) {
+        GoogleMapStateHolder(isMapLoaded, reqLastLocation, clusterData, cameraPositionState)
+    }
 }
