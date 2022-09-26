@@ -58,6 +58,6 @@ private fun TestWeatherLayout() {
         ) {
             dialogOpen.targetState = true
         }
-        WeatherView(open = dialogOpen)
+        WeatherView(open = dialogOpen, isGoogleMap = true)
     }
 }

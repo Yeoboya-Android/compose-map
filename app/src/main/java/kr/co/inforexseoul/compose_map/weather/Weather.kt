@@ -36,20 +36,19 @@ import kr.co.inforexseoul.compose_map.R
 @Composable
 fun WeatherView(
     open: MutableTransitionState<Boolean>,
+    isGoogleMap: Boolean,
     weatherViewModel: WeatherViewModel = viewModel()
 ) {
     if (open.targetState) {
         val result by weatherViewModel.districtState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
             is Result.Error -> Log.e("qwe123", "district error")
-            is Result.Loading -> {
-                Log.i("qwe123", ".WeatherView()::: Loading")
-                LoadingBar()
-            }
+            is Result.Loading -> LoadingBar()
             is Result.Success -> {
                 Log.d("qwe123", "WeatherView()::: Success")
                 WeatherBottomSlideDialog(
                     open = open,
+                    isGoogleMap = isGoogleMap,
                     district = (result as Result.Success<District>).data,
                     weatherViewModel = weatherViewModel
                 )
@@ -61,17 +60,16 @@ fun WeatherView(
 @Composable
 fun WeatherBottomSlideDialog(
     open: MutableTransitionState<Boolean>,
+    isGoogleMap: Boolean,
     district: District,
     weatherViewModel: WeatherViewModel
 ) {
-    val isGoogle = true
-    if (isGoogle) {
+    if (isGoogleMap) {
         val result by weatherViewModel.openWeatherForecastState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
-            is Result.Error -> Log.e("qwe123", "error")
+            is Result.Error -> Log.e("qwe123", "weather error")
             is Result.Loading -> LoadingBar()
             is Result.Success -> {
-                Log.d("qwe123", "WeatherBottomSlideDialog()::: Success")
                 BottomSlideDialog(open = open) {
                     OpenWeatherForecastContent(
                         title = district.districtName,
@@ -83,7 +81,7 @@ fun WeatherBottomSlideDialog(
     } else {
         val result by weatherViewModel.villageForecastState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
-            is Result.Error -> Log.e("qwe123", "error")
+            is Result.Error -> Log.e("qwe123", "weather error")
             is Result.Loading -> LoadingBar()
             is Result.Success -> {
                 val data = (result as Result.Success<VillageForecastItems>).data
@@ -93,7 +91,6 @@ fun WeatherBottomSlideDialog(
                         data = data.getWeatherDataList()
                     )
                 }
-
             }
         }
     }
