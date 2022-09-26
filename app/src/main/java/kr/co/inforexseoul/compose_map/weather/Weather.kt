@@ -26,38 +26,59 @@ import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
 import kr.co.inforexseoul.common_ui.component.CommonText
 import kr.co.inforexseoul.common_ui.component.LoadingBar
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
-import kr.co.inforexseoul.compose_map.map.MapViewModel
 import kr.co.inforexseoul.core_data.state.Result
+import kr.co.inforexseoul.core_database.entity.District
 
 @Composable
 fun WeatherView(
     open: MutableTransitionState<Boolean>,
     weatherViewModel: WeatherViewModel = viewModel()
 ) {
-    if (open.targetState){
-        val isGoogle = true
-        if (isGoogle) {
-            val result by weatherViewModel.openWeatherMapState.collectAsStateWithLifecycle(Result.Loading)
-            when (result) {
-                is Result.Error -> Log.e("qwe123", "error")
-                is Result.Loading -> LoadingBar()
-                is Result.Success -> {
-                    BottomSlideDialog(open = open) {
-                        OpenWeatherMapContent(
-                            title = getDialogText(),
-                            data = (result as Result.Success<OpenWeatherMapDataModel>).data
-                        )
-                    }
-                }
+    if (open.targetState) {
+        val result by weatherViewModel.districtState.collectAsStateWithLifecycle(Result.Loading)
+        when (result) {
+            is Result.Error -> Log.e("qwe123", "district error")
+            is Result.Loading -> {
+                Log.i("qwe123", ".WeatherView()::: Loading")
+                LoadingBar()
             }
-        } else {
-
+            is Result.Success -> {
+                Log.d("qwe123", "WeatherView()::: Success")
+                WeatherBottomSlideDialog(
+                    open = open,
+                    district = (result as Result.Success<District>).data,
+                    weatherViewModel = weatherViewModel
+                )
+            }
         }
     }
 }
 
-fun getDialogText(): String {
-    return "광주광역시 남구 효덕동"
+@Composable
+fun WeatherBottomSlideDialog(
+    open: MutableTransitionState<Boolean>,
+    district: District,
+    weatherViewModel: WeatherViewModel
+) {
+    val isGoogle = true
+    if (isGoogle) {
+        val result by weatherViewModel.openWeatherMapState.collectAsStateWithLifecycle(Result.Loading)
+        when (result) {
+            is Result.Error -> Log.e("qwe123", "error")
+            is Result.Loading -> LoadingBar()
+            is Result.Success -> {
+                Log.d("qwe123", "WeatherBottomSlideDialog()::: Success")
+                BottomSlideDialog(open = open) {
+                    OpenWeatherMapContent(
+                        title = district.districtName,
+                        data = (result as Result.Success<OpenWeatherMapDataModel>).data
+                    )
+                }
+            }
+        }
+    } else {
+
+    }
 }
 
 @Composable

@@ -4,10 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.co.inforexseoul.core_data.repository.MapRepository
-import kr.co.inforexseoul.core_data.repository.MapRepositoryImpl
-import kr.co.inforexseoul.core_data.repository.OpenWeatherMapRepository
-import kr.co.inforexseoul.core_data.repository.OpenWeatherMapRepositoryImpl
+import kr.co.inforexseoul.core_data.repository.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,4 +19,9 @@ interface RepositoryModule {
     fun bindsMapRepository(
         mapRepository: MapRepositoryImpl
     ) : MapRepository
+
+    @Binds
+    fun bindsDistrictRepository(
+        districtRepository: DistrictRepositoryImpl
+    ) : DistrictRepository
 }
