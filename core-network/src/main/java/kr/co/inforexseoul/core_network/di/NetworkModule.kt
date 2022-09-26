@@ -6,7 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.co.inforexseoul.core_network.service.MapApiService
-import kr.co.inforexseoul.core_network.service.OpenWeatherMapApiService
+import kr.co.inforexseoul.core_network.service.OpenWeatherApiService
+import kr.co.inforexseoul.core_network.service.VillageForecastApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,7 +20,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val baseUrlOpenWeatherMap = "https://api.openweathermap.org/"
+    // 날씨
+    private const val baseUrlVillageForecast = "http://apis.data.go.kr/"
+    private const val baseUrlOpenWeather = "https://api.openweathermap.org/"
     /**
      * TODO 버스 API용
      * */
@@ -52,7 +55,12 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesOpenWeatherMapApiService(retrofit: Retrofit.Builder): OpenWeatherMapApiService =
-        retrofit.baseUrl(baseUrlOpenWeatherMap).build().create(OpenWeatherMapApiService::class.java)
+    fun providesOpenWeatherApiService(retrofit: Retrofit.Builder): OpenWeatherApiService =
+        retrofit.baseUrl(baseUrlOpenWeather).build().create(OpenWeatherApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesVillageForecastApiService(retrofit: Retrofit.Builder): VillageForecastApiService =
+        retrofit.baseUrl(baseUrlVillageForecast).build().create(VillageForecastApiService::class.java)
 
 }

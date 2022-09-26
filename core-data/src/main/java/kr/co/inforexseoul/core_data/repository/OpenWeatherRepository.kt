@@ -1,13 +1,13 @@
 package kr.co.inforexseoul.core_data.repository
 
 import kotlinx.coroutines.flow.Flow
-import kr.co.inforexseoul.common_model.test_model.OpenWeatherMapDataModel
+import kr.co.inforexseoul.common_model.test_model.OpenWeatherForecastModel
 
-interface OpenWeatherMapRepository {
-    fun getOpenWeatherMapForecast(
+interface OpenWeatherRepository {
+    fun getOpenWeatherForecast(
         appId: String,
         latitude: Double,
         longitude: Double,
         exclude: String
-    ): Flow<OpenWeatherMapDataModel>
+    ): Flow<OpenWeatherForecastModel>
 }

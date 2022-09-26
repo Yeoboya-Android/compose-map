@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class OpenWeatherMapDataModel(
+data class OpenWeatherForecastModel(
     @SerializedName("lat") var lat: Double,
     @SerializedName("lon") var lon: Double,
     @SerializedName("timezone") var timezone: String,

@@ -37,6 +37,10 @@
             android:name="kr.co.inforexseoul.compose_map.weather.OPEN_WEATHER_MAP_KEY"
             android:value="${OPEN_WEATHER_MAP_KEY}" />
 
+        <meta-data
+            android:name="kr.co.inforexseoul.compose_map.weather.VILLAGE_FORECAST"
+            android:value="${VILLAGE_FORECAST}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

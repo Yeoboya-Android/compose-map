@@ -1,18 +1,17 @@
 package kr.co.inforexseoul.core_network.service
 
 import kotlinx.coroutines.flow.Flow
-import kr.co.inforexseoul.common_model.test_model.OpenWeatherMapDataModel
+import kr.co.inforexseoul.common_model.test_model.OpenWeatherForecastModel
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.Url
 
-interface OpenWeatherMapApiService {
+interface OpenWeatherApiService {
 
     @GET("data/3.0/onecall")
-    fun getOpenWeatherMapForecast(
+    fun getOpenWeatherForecast(
         @Query("appid") appId: String,
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("exclude") exclude: String,
-    ): Flow<OpenWeatherMapDataModel>
+    ): Flow<OpenWeatherForecastModel>
 }

@@ -1,5 +1,6 @@
 package kr.co.inforexseoul.compose_map.weather
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -14,12 +15,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kr.co.inforexseoul.compose_map.BuildConfig
 import kr.co.inforexseoul.core_data.state.Result
-import kr.co.inforexseoul.core_data.usecase.GetOpenWeatherMapDataUseCase
-import kr.co.inforexseoul.core_data.usecase.InsertDistrictUseCase
-import kr.co.inforexseoul.core_data.usecase.SelectDistrictCountUseCase
-import kr.co.inforexseoul.core_data.usecase.SelectDistrictUseCase
+import kr.co.inforexseoul.core_data.usecase.*
 import kr.co.inforexseoul.core_database.entity.District
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,13 +28,29 @@ class WeatherViewModel @Inject constructor(
     selectDistrictCountUseCase: SelectDistrictCountUseCase,
     insertDistrictUseCase: InsertDistrictUseCase,
     selectDistrictUseCase: SelectDistrictUseCase,
-    getOpenWeatherMapDataUseCase: GetOpenWeatherMapDataUseCase
+    getOpenWeatherForecastUseCase: GetOpenWeatherForecastUseCase,
+    getVillageForecastUseCase: GetVillageForecastUseCase
 ) : ViewModel() {
 
     private val context: Context get() = app.applicationContext
 
-    val openWeatherMapState =
-        getOpenWeatherMapDataUseCase.invoke(
+    val villageForecastState =
+        getVillageForecastUseCase.invoke(
+            serviceKey = BuildConfig.VILLAGE_FORECAST,
+            numOfRows = 1000,
+            pageNo = 1,
+            baseDate = getBaseDate(),
+            baseTime = getBaseTime(),
+            nx = 58,
+            ny = 74
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = Result.Loading
+        )
+
+    val openWeatherForecastState =
+        getOpenWeatherForecastUseCase.invoke(
             appId = BuildConfig.OPEN_WEATHER_MAP_KEY,
             latitude = 35.1470,
             longitude = 126.8452,
@@ -107,6 +123,17 @@ class WeatherViewModel @Inject constructor(
     }
 
 
+    @SuppressLint("SimpleDateFormat")
+    private fun getBaseDate(): String {
+        val baseTimeMillis = System.currentTimeMillis() - 3600000
+        return SimpleDateFormat("yyyyMMdd").format(Date(baseTimeMillis))
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getBaseTime(): String {
+        val baseTimeMillis = System.currentTimeMillis() - 3600000
+        return SimpleDateFormat("HHmm").format(Date(baseTimeMillis))
+    }
 
     /*fun getDistrictState(latitude: Double, longitude: Double): StateFlow<Result<District>> {
         Log.d("qwe123", "WeatherViewModel.getDistrictState():::")

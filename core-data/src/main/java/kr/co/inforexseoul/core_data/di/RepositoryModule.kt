@@ -11,9 +11,14 @@ import kr.co.inforexseoul.core_data.repository.*
 interface RepositoryModule {
 
     @Binds
-    fun bindsOpenWeatherMapRepository(
-        weatherRepository: OpenWeatherMapRepositoryImpl
-    ): OpenWeatherMapRepository
+    fun bindsOpenWeatherRepository(
+        weatherRepository: OpenWeatherRepositoryImpl
+    ): OpenWeatherRepository
+
+    @Binds
+    fun bindsVillageForecastRepository(
+        villageForecastRepository: VillageForecastRepositoryImpl
+    ): VillageForecastRepository
 
     @Binds
     fun bindsMapRepository(
