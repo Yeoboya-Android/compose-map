@@ -1,6 +1,7 @@
-package kr.co.inforexseoul.compose_map.map
+package kr.co.inforexseoul.compose_map.map.naver
 
 import android.util.Log
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
@@ -11,40 +12,45 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.*
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.*
+import com.naver.maps.map.overlay.OverlayImage
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
+import kr.co.inforexseoul.compose_map.map.MapViewModel
 
-private const val TAG = "GoogleMap"
+private const val TAG = "NaverMap"
 
 /**
- * 구글 지도
+ * 네이버 지도
  */
 @Composable
-fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
+fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
     MainTheme {
+
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
-        val cameraPositionState = rememberCameraPositionState{
+        val cameraPositionState : CameraPositionState = rememberCameraPositionState {
             position = getCameraPosition(mapViewModel.presentLocation)
         }
 
-        Box(Modifier.fillMaxSize()){
-            GoogleMapView(
+        Box(Modifier.fillMaxSize()) {
+            NaverMapView(
                 modifier = Modifier.matchParentSize(),
                 cameraPositionState = cameraPositionState,
                 onMapLoaded = {
                     isMapLoaded = true
                 },
                 content = {
-                    //GetMarkerInCameraBound(cameraPositionState = cameraPositionState, mapViewModel = mapViewModel)
+                    GetMarkerInCameraBound(cameraPositionState, mapViewModel)
                 }
             ){
                 reqLastLocation = true
@@ -64,37 +70,32 @@ fun OpenGoogleMap(mapViewModel: MapViewModel = viewModel()) {
                 }
             }
         }
-
         GetPresentLocation(reqLastLocation, mapViewModel) {
             cameraPositionState.position = it
             reqLastLocation = false
         }
-
     }
 }
 
-
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun GoogleMapView(
+private fun NaverMapView(
     modifier: Modifier = Modifier,
     cameraPositionState: CameraPositionState = rememberCameraPositionState(),
     onMapLoaded : () -> Unit = {},
     content : @Composable () -> Unit = {},
-    onClick: () -> Unit = {}
+    onClick : () -> Unit = {}
 ) {
-    GoogleMap(
+    NaverMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
-        properties = MapProperties(mapType = MapType.NORMAL),
-        uiSettings = MapUiSettings(compassEnabled = false),
+        properties = MapProperties(mapType = MapType.Basic),
+        uiSettings = MapUiSettings(isCompassEnabled = false),
         onMapLoaded = onMapLoaded,
-        onPOIClick = {
-            Log.d(TAG, "POI clicked: ${it.name}")
-        },
-        onMapClick = {
-            Log.d(TAG, "Position ${it.latitude}, and ${it.longitude}")
+        onMapClick = { lat, lng->
+            Log.d(TAG, "Position ${lat}, and ${lng}")
         }
-    ) {
+    ){
         content()
     }
     Row(
@@ -120,7 +121,7 @@ private fun GoogleMapView(
  */
 @Composable
 private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
-    if(reqLastLocation){
+    if(reqLastLocation) {
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
             called.invoke(getCameraPosition(mapViewModel.presentLocation))
@@ -131,20 +132,25 @@ private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewM
 /**
  * 카메라 범위안에 있는 곳에 마커 찍기
  */
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel: MapViewModel) {
+private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, mapViewModel : MapViewModel){
     if(!cameraPositionState.isMoving) {
-        mapViewModel.stationMap.forEach {
+        val context = LocalContext.current
+        val bitmapDrawable = AppCompatResources.getDrawable(context, R.drawable.bus_station)?.toBitmap()
+        mapViewModel.stationMap.forEach{
             val position = LatLng(it.value.first, it.value.second)
-            if(cameraPositionState.projection!!.visibleRegion.latLngBounds.contains(position)) {
-                Marker(rememberMarkerState(position = position))
+            if(cameraPositionState.coveringBounds?.contains(position) == true) {
+                Marker(
+                    state = rememberMarkerState(position = position),
+                    icon = OverlayImage.fromBitmap(bitmapDrawable!!)
+                )
             }
         }
     }
-
-
 }
 
+
 private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
-    return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
+    return CameraPosition(LatLng(location.first, location.second), 15.0)
 }
