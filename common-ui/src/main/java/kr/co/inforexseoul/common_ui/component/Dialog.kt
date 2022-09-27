@@ -20,33 +20,39 @@ import androidx.compose.ui.window.DialogProperties
 @Composable
 fun BottomSlideDialog(
     open: MutableTransitionState<Boolean>,
+    onDismissRequest: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
-    Dialog(
-        onDismissRequest = { open.targetState = false },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
-    ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                onClick = { open.targetState = false },
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            )
+    if (open.targetState) {
+        Dialog(
+            onDismissRequest = {
+                open.targetState = false
+                onDismissRequest.invoke()
+            },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            AnimatedVisibility(
-                visibleState = open,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .clickable(
-                        onClick = { },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                enter = slideInVertically { it },
-                exit = slideOutVertically { it }
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    onClick = { open.targetState = false },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                )
             ) {
-                content()
+                AnimatedVisibility(
+                    visibleState = open,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .clickable(
+                            onClick = { },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ),
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it }
+                ) {
+                    content()
+                }
             }
         }
     }

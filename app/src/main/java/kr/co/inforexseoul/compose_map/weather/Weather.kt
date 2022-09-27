@@ -1,5 +1,6 @@
 package kr.co.inforexseoul.compose_map.weather
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.Image
@@ -12,7 +13,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -29,55 +32,69 @@ import kr.co.inforexseoul.common_ui.component.CommonText
 import kr.co.inforexseoul.common_ui.component.LoadingBar
 import kr.co.inforexseoul.common_ui.theme.Mint20
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
+import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_database.entity.District
-import kr.co.inforexseoul.compose_map.R
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun WeatherView(
-    open: MutableTransitionState<Boolean>,
     isGoogleMap: Boolean,
+    coordinate: MutableState<Pair<Double, Double>?>,
     weatherViewModel: WeatherViewModel = viewModel()
 ) {
-    if (open.targetState) {
+    val open = remember { MutableTransitionState(false) }
+    if (coordinate.value != null) {
         val result by weatherViewModel.districtState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
             is Result.Error -> Log.e("qwe123", "district error")
-            is Result.Loading -> LoadingBar()
+            is Result.Loading -> {
+                Log.d("qwe123", "select district loading")
+            }
             is Result.Success -> {
-                Log.d("qwe123", "WeatherView()::: Success")
+                val district = (result as Result.Success<District>).data
+                Log.d("qwe123", "WeatherView()::: district name: ${district.districtName}")
                 WeatherBottomSlideDialog(
                     open = open,
+                    coordinate = coordinate,
                     isGoogleMap = isGoogleMap,
-                    district = (result as Result.Success<District>).data,
+                    district = district,
                     weatherViewModel = weatherViewModel
                 )
             }
         }
+        weatherViewModel.getDistrict(coordinate.value!!.first, coordinate.value!!.second)
     }
 }
 
 @Composable
 fun WeatherBottomSlideDialog(
     open: MutableTransitionState<Boolean>,
+    coordinate: MutableState<Pair<Double, Double>?>,
     isGoogleMap: Boolean,
     district: District,
     weatherViewModel: WeatherViewModel
 ) {
+    Log.d("qwe123", "WeatherBottomSlideDialog()::: district name: ${district.districtName}")
     if (isGoogleMap) {
         val result by weatherViewModel.openWeatherForecastState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
             is Result.Error -> Log.e("qwe123", "weather error")
             is Result.Loading -> LoadingBar()
             is Result.Success -> {
-                BottomSlideDialog(open = open) {
+                BottomSlideDialog(
+                    open = open,
+                    onDismissRequest = { coordinate.value = null }
+                ) {
                     OpenWeatherForecastContent(
                         title = district.districtName,
                         data = (result as Result.Success<OpenWeatherForecastModel>).data
                     )
                 }
+                open.targetState = true
             }
         }
+        weatherViewModel.getOpenWeatherForecast(coordinate.value?.first ?: .0, coordinate.value?.second ?: .0)
     } else {
         val result by weatherViewModel.villageForecastState.collectAsStateWithLifecycle(Result.Loading)
         when (result) {
@@ -85,20 +102,26 @@ fun WeatherBottomSlideDialog(
             is Result.Loading -> LoadingBar()
             is Result.Success -> {
                 val data = (result as Result.Success<VillageForecastItems>).data
-                BottomSlideDialog(open = open) {
+                BottomSlideDialog(
+                    open = open,
+                    onDismissRequest = { coordinate.value = null }
+                ) {
                     VillageForecastContent(
                         title = district.districtName,
                         data = data.getWeatherDataList()
                     )
                 }
+                open.targetState = true
             }
         }
+        weatherViewModel.getVillageForecast(district.nx, district.ny)
     }
 }
 
 /** 기상청 API */
 @Composable
 fun VillageForecastContent(title: String, data: List<WeatherDataModel>) {
+    Log.d("qwe123", "VillageForecastContent():::")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -166,6 +189,7 @@ fun VillageForecastItem(data: WeatherDataModel) {
 /** Open Weather API */
 @Composable
 fun OpenWeatherForecastContent(title: String, data: OpenWeatherForecastModel) {
+    Log.d("qwe123", "OpenWeatherForecastContent():::")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

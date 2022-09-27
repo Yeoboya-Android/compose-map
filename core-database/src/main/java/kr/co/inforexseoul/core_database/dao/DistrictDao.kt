@@ -14,9 +14,7 @@ interface DistrictDao {
     fun selectDistrictCount(): Flow<Int>
 
     @Query("SELECT * FROM District " +
-            "WHERE latitude<>:latitude " +
-            "AND longitude<>:longitude " +
-            "ORDER BY ABS(latitude - :latitude), ABS(longitude - :longitude) ASC " +
+            "ORDER BY ABS(latitude - :latitude) + ABS(longitude - :longitude) ASC " +
             "LIMIT 1")
     fun selectDistrict(latitude: Double, longitude: Double): Flow<District>
 

@@ -1,5 +1,6 @@
 package kr.co.inforexseoul.core_network.di
 
+import android.util.Log
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,11 @@ object NetworkModule {
     @Provides
     fun providesOkHttpClient(): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
+            .addInterceptor { chain->
+                val request = chain.request()
+                Log.d("qwe123", "request url: ${request.url}")
+                chain.proceed(request)
+            }
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)

@@ -28,6 +28,7 @@ import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapViewModel
+import kr.co.inforexseoul.compose_map.weather.WeatherView
 
 private const val TAG = "GoogleMap"
 
@@ -93,6 +94,8 @@ private fun GoogleMapView(
     content : @Composable () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
+
+    val coordinate: MutableState<Pair<Double, Double>?> = remember { mutableStateOf(null) }
     GoogleMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
@@ -102,8 +105,9 @@ private fun GoogleMapView(
         onPOIClick = {
             Log.d(TAG, "POI clicked: ${it.name}")
         },
-        onMapClick = {
+        onMapLongClick = {
             Log.d(TAG, "Position ${it.latitude}, and ${it.longitude}")
+            coordinate.value = Pair(it.latitude, it.longitude)
         }
     ) {
         content()
@@ -123,6 +127,10 @@ private fun GoogleMapView(
             )
         }
     }
+    WeatherView(
+        isGoogleMap = true,
+        coordinate = coordinate
+    )
 }
 
 /**

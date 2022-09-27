@@ -26,6 +26,7 @@ import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapViewModel
+import kr.co.inforexseoul.compose_map.weather.WeatherView
 
 private const val TAG = "NaverMap"
 
@@ -50,7 +51,7 @@ fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
                     isMapLoaded = true
                 },
                 content = {
-                    GetMarkerInCameraBound(cameraPositionState, mapViewModel)
+//                    GetMarkerInCameraBound(cameraPositionState, mapViewModel)
                 }
             ){
                 reqLastLocation = true
@@ -86,6 +87,8 @@ private fun NaverMapView(
     content : @Composable () -> Unit = {},
     onClick : () -> Unit = {}
 ) {
+
+    val coordinate: MutableState<Pair<Double, Double>?> = remember { mutableStateOf(null) }
     NaverMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
@@ -94,6 +97,9 @@ private fun NaverMapView(
         onMapLoaded = onMapLoaded,
         onMapClick = { lat, lng->
             Log.d(TAG, "Position ${lat}, and ${lng}")
+        },
+        onMapLongClick = { _, latLng->
+            coordinate.value = Pair(latLng.latitude, latLng.longitude)
         }
     ){
         content()
@@ -113,6 +119,11 @@ private fun NaverMapView(
             )
         }
     }
+
+    WeatherView(
+        isGoogleMap = false,
+        coordinate = coordinate
+    )
 
 }
 

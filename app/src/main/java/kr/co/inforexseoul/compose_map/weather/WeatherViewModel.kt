@@ -10,9 +10,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jxl.Workbook
 import jxl.read.biff.BiffException
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kr.co.inforexseoul.common_model.test_model.OpenWeatherForecastModel
+import kr.co.inforexseoul.common_model.test_model.VillageForecastItems
 import kr.co.inforexseoul.compose_map.BuildConfig
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_data.usecase.*
@@ -27,52 +31,73 @@ class WeatherViewModel @Inject constructor(
     private val app: Application,
     selectDistrictCountUseCase: SelectDistrictCountUseCase,
     insertDistrictUseCase: InsertDistrictUseCase,
-    selectDistrictUseCase: SelectDistrictUseCase,
-    getOpenWeatherForecastUseCase: GetOpenWeatherForecastUseCase,
-    getVillageForecastUseCase: GetVillageForecastUseCase
+    private val selectDistrictUseCase: SelectDistrictUseCase,
+    private val getOpenWeatherForecastUseCase: GetOpenWeatherForecastUseCase,
+    private val getVillageForecastUseCase: GetVillageForecastUseCase
 ) : ViewModel() {
 
     private val context: Context get() = app.applicationContext
 
-    val villageForecastState =
+    init {
+        fetchDistrictList(selectDistrictCountUseCase, insertDistrictUseCase)
+    }
+
+    private val _districtState = MutableStateFlow<Result<District>>(Result.Loading)
+    var districtState =_districtState
+
+    private val _openWeatherForecastState = MutableStateFlow<Result<OpenWeatherForecastModel>>(Result.Loading)
+    var openWeatherForecastState = _openWeatherForecastState
+
+    private val _villageForecastState = MutableStateFlow<Result<VillageForecastItems>>(Result.Loading)
+    var villageForecastState = _villageForecastState
+
+    fun getDistrict(latitude: Double, longitude: Double) {
+        Log.e("qwe123", "WeatherViewModel.setDistrict():::")
+        selectDistrictUseCase.invoke(
+            latitude = latitude,
+            longitude = longitude,
+        ).onEach {
+            _districtState.value = it
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = Result.Loading
+        )
+    }
+
+    fun getOpenWeatherForecast(latitude: Double, longitude: Double) {
+        Log.e("qwe123", "WeatherViewModel.getOpenWeatherForecast():::")
+        getOpenWeatherForecastUseCase.invoke(
+            appId = BuildConfig.OPEN_WEATHER_MAP_KEY,
+            latitude = latitude,
+            longitude = longitude,
+            exclude = "daily,minutely,current"
+        ).onEach {
+            _openWeatherForecastState.value = it
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = Result.Loading
+        )
+    }
+
+    fun getVillageForecast(nx: Int, ny: Int) {
+        Log.e("qwe123", "WeatherViewModel.getVillageForecast():::")
         getVillageForecastUseCase.invoke(
             serviceKey = BuildConfig.VILLAGE_FORECAST,
             numOfRows = 1000,
             pageNo = 1,
-            baseDate = getBaseDate(),
-            baseTime = getBaseTime(),
-            nx = 58,
-            ny = 74
-        ).stateIn(
+            baseDate = getBaseDateTime("yyyyMMdd"),
+            baseTime = getBaseDateTime("HHmm"),
+            nx = nx,
+            ny = ny
+        ).onEach {
+            _villageForecastState.value = it
+        }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             initialValue = Result.Loading
         )
-
-    val openWeatherForecastState =
-        getOpenWeatherForecastUseCase.invoke(
-            appId = BuildConfig.OPEN_WEATHER_MAP_KEY,
-            latitude = 35.1470,
-            longitude = 126.8452,
-            exclude = "daily,minutely,current"
-        ).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = Result.Loading
-        )
-
-    val districtState =
-        selectDistrictUseCase.invoke(
-            latitude = 35.1470,
-            longitude = 126.8452,
-        ).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = Result.Loading
-        )
-
-    init {
-        fetchDistrictList(selectDistrictCountUseCase, insertDistrictUseCase)
     }
 
     private fun fetchDistrictList(
@@ -81,7 +106,6 @@ class WeatherViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             selectDistrictCountUseCase.invoke().collect { count ->
-                Log.d("qwe123", "WeatherViewModel.fetchDistrictList()::: count: $count")
                 if (count <= 0) readDistrictExcel(insertDistrictUseCase)
                 else Toast.makeText(context, "지역 DB 업데이트 완료", Toast.LENGTH_SHORT).show()
             }
@@ -122,17 +146,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-
     @SuppressLint("SimpleDateFormat")
-    private fun getBaseDate(): String {
+    private fun getBaseDateTime(pattern: String): String {
         val baseTimeMillis = System.currentTimeMillis() - 3600000
-        return SimpleDateFormat("yyyyMMdd").format(Date(baseTimeMillis))
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getBaseTime(): String {
-        val baseTimeMillis = System.currentTimeMillis() - 3600000
-        return SimpleDateFormat("HHmm").format(Date(baseTimeMillis))
+        return SimpleDateFormat(pattern).format(Date(baseTimeMillis))
     }
 
     /*fun getDistrictState(latitude: Double, longitude: Double): StateFlow<Result<District>> {

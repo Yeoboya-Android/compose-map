@@ -44,8 +44,7 @@ data class VillageForecastItems(
                 else -> WeatherCondition.Clear
             }
             val date = String.format(
-                "%4s.%2s.%2s",
-                pty.fcstDate.substring(0,4),
+                "%2s.%2s",
                 pty.fcstDate.substring(4,6),
                 pty.fcstDate.substring(6,8)
             )
