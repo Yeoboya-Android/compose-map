@@ -1,4 +1,4 @@
-package kr.co.inforexseoul.common_util.serialize
+package kr.co.inforexseoul.common_util.extension
 
 import android.os.Build
 import android.os.Bundle

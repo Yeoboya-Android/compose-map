@@ -2,7 +2,6 @@ package kr.co.inforexseoul.core_database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
@@ -13,4 +12,5 @@ data class District(
     @ColumnInfo(name = "ny") val ny: Int,
     @ColumnInfo(name = "latitude") val latitude: Double,
     @ColumnInfo(name = "longitude") val longitude: Double,
+    @ColumnInfo(name = "recent_search_yn") val recentSearchYn: String = "n",
 )

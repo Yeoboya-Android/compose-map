@@ -5,6 +5,7 @@ object ProjectPlugins {
     const val KAPT = "kapt"
     const val SECRET_GRADLE = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
     const val GOOGLE_SERVICES = "com.google.gms.google-services"
+    const val PARCELIZE = "kotlin-parcelize"
 
     /** Gradle Convention Plugins */
     const val BASE_PLUGIN = "base-script-plugin"

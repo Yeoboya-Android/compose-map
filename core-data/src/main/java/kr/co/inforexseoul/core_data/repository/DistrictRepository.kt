@@ -8,5 +8,9 @@ interface DistrictRepository {
     fun getDistrictCount(): Flow<Int>
     suspend fun addDistrict(districtList: List<District>)
     fun getDistrict(latitude: Double, longitude: Double): Flow<District>
+    fun findDistrictNames(word: String): Flow<List<District>>
+    fun getRecentSearchDistricts(): Flow<List<District>>
+    fun updateAddRecentSearchDistricts(district: District): Flow<Unit>
+    fun updateDeleteRecentSearchDistrict(district: District): Flow<Unit>
 
 }

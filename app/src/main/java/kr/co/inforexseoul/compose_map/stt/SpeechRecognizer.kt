@@ -1,17 +1,32 @@
 package kr.co.inforexseoul.compose_map.stt
 
-import android.os.Bundle
 import android.speech.SpeechRecognizer
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kr.co.inforexseoul.common_model.test_model.state.SpeechState
+import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
 import kr.co.inforexseoul.common_ui.component.MainSnackBar
 import kr.co.inforexseoul.common_ui.component.TextButton
-import kr.co.inforexseoul.common_util.serialize.stringList
+import kr.co.inforexseoul.common_util.extension.stringList
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
+
+@Composable
+fun SpeechRecognizerDialog(
+    speechRecognizerDialogOpen: MutableTransitionState<Boolean> = MutableTransitionState(false),
+    result: (String) -> Unit
+) {
+    BottomSlideDialog(speechRecognizerDialogOpen) {
+        SpeechRecognizer { textList ->
+            speechRecognizerDialogOpen.targetState = false
+            result.invoke(textList.first())
+        }
+    }
+}
 
 @Composable
 fun SpeechRecognizer(
@@ -19,8 +34,8 @@ fun SpeechRecognizer(
     success: @Composable (List<String>) -> Unit
 ) {
     val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle(initial = SpeechState.UnInit)
-    @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
     val scaffoldState = rememberScaffoldState()
+    @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
 
     TextButton(text = "스타트!") {
         if (speechRecognizerViewModel.speechState.value !is SpeechState.Operation)
@@ -28,12 +43,14 @@ fun SpeechRecognizer(
         else
             showSnackBar = R.string.speech_error_message_8
     }
+
     when (speechState) {
         is SpeechState.Completed.Success -> {
             val textList = (speechState as SpeechState.Completed.Success)
                 .data.stringList(SpeechRecognizer.RESULTS_RECOGNITION)
 
-            success.invoke(textList)
+            if (textList.isNotEmpty())
+                success.invoke(textList)
         }
         is SpeechState.Completed.Fail -> {
             when ((speechState as SpeechState.Completed.Fail).error) {
@@ -60,19 +77,5 @@ fun SpeechRecognizer(
             cancel = { showSnackBar = null },
             success = { showSnackBar = null }
         )
-    }
-}
-
-sealed interface SpeechState {
-    object UnInit : SpeechState
-
-    sealed interface Operation : SpeechState {
-        object ReadyForSpeech : Operation
-        object EndOfSpeech : Operation
-    }
-
-    sealed interface Completed : SpeechState {
-        data class Fail(val error: Int) : Completed
-        data class Success(val data: Bundle?) : Completed
     }
 }
