@@ -1,22 +1,17 @@
 package kr.co.inforexseoul.compose_map.map
 
 import android.util.Log
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kr.co.inforexseoul.common_model.test_model.BusStationInfo
+import kr.co.inforexseoul.common_ui.UIConstants
 import kr.co.inforexseoul.common_ui.component.CustomToggleGroup
 import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.permission.CheckPermission
@@ -32,34 +27,22 @@ fun MapScreen(
     mapViewModel: MapViewModel = viewModel(),
     appbarTitle: MutableState<@Composable () -> Unit>
 ) {
-    appbarTitle.value = {
-        Text(
-            text = "지도",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().offset(x = (-32).dp)
-        )
-    }
-
     var mapState by remember { mutableStateOf<MapState>(MapState.GoogleMap) }
     val searchDialogOpen = remember { MutableTransitionState(false) }
     var searchWord by remember { mutableStateOf("") }
+
 
     GetBusStationInfo(mapViewModel) {
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
         }
         ScreenSwitch(mapState) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                TextButton(
-                    text = searchWord.ifEmpty { "검색" },
-                    backgroundColor = MaterialTheme.colors.background,
-                    contentColor = LocalContentColor.current.copy(LocalContentAlpha.current),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    onClick = { searchDialogOpen.targetState = true }
-                )
-                CustomToggleGroup(mapViewModel.list) { text ->
+            appbarTitle.value = { SearchButton(searchWord, searchDialogOpen) }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                CustomToggleGroup(options =  mapViewModel.list) { text ->
                     searchWord = ""
                     mapViewModel.setCameraPositionState(CameraPositionWrapper.UnInit)
 
@@ -76,6 +59,20 @@ fun MapScreen(
         searchWord = district.districtName
         mapViewModel.setCameraPositionState(mapState, district.latitude, district.longitude)
     }
+}
+
+@Composable
+fun SearchButton(
+    searchWord: String,
+    searchDialogOpen: MutableTransitionState<Boolean>
+) {
+    TextButton(
+        text = searchWord.ifEmpty { "검색" },
+        fontSize = UIConstants.FONT_SIZE_LARGE.sp,
+        contentColor = Color.White,
+        modifier = Modifier.defaultMinSize(1.dp).fillMaxWidth().offset(x = (-32).dp),
+        onClick = { searchDialogOpen.targetState = true }
+    )
 }
 
 /**

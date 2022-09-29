@@ -60,10 +60,7 @@ fun TranslateScreen(
         }
     }
 
-    appbarTitle.value = {
-        APISelector(apiText, apiItemList)
-    }
-
+    appbarTitle.value = { APISelector(apiText, apiItemList) }
     Column(
         modifier = Modifier
             .fillMaxSize()

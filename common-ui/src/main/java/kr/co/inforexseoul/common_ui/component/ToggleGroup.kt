@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomToggleGroup(
+    modifier: Modifier = Modifier,
     options: List<String>,
     style: TextStyle = MaterialTheme.typography.body1.merge(),
     cornerShape: Shape = RoundedCornerShape(12.dp),
@@ -28,7 +29,6 @@ fun CustomToggleGroup(
     @ColorRes contentColor: Color = Color.White,
     @ColorRes selectedColor: Color = MaterialTheme.colors.primary,
     @ColorRes unSelectedColor: Color = Color.LightGray,
-    modifier: Modifier = Modifier,
     clickable: (String) -> Unit
 ) {
     var selectedOption by remember { mutableStateOf(options[0]) }
