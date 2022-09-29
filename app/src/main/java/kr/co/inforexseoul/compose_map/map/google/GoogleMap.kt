@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.compose.*
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
+import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapViewModel
 import kr.co.inforexseoul.compose_map.weather.WeatherView
@@ -42,9 +42,15 @@ fun OpenGoogleMap(
         isMapLoaded = false,
         reqLastLocation = false,
         clusterData = ClusterData(LatLng(0.0, 0.0), "", ""),
-        cameraPositionState = CameraPositionState(position = getCameraPosition(mapViewModel.presentLocation))
+        cameraPositionState = CameraPositionState(position = mapViewModel.getCameraPosition(mapViewModel.presentLocation))
     )
 ) {
+    val position by mapViewModel.cameraPositionState.collectAsStateWithLifecycle(
+        initial = mapViewModel.getCameraPosition(
+            mapViewModel.presentLocation
+        )
+    )
+
     MainTheme {
         GetAllMarker(mapViewModel = mapViewModel, items = stateHolder.items)
 
@@ -78,11 +84,11 @@ fun OpenGoogleMap(
             }
         }
 
-        GetPresentLocation(stateHolder.reqLastLocation, mapViewModel) {
-            stateHolder.cameraPositionState.position = it
-            stateHolder.reqLastLocation = false
-        }
-
+        GetPresentLocation(
+            stateHolder.reqLastLocation,
+            mapViewModel
+        ) { stateHolder.reqLastLocation = false }
+        stateHolder.cameraPositionState.position = position
     }
 }
 
@@ -137,11 +143,12 @@ private fun GoogleMapView(
  * 현재 위치 가져오기
  */
 @Composable
-private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
+private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called: () -> Unit) {
     if(reqLastLocation){
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
-            called.invoke(getCameraPosition(mapViewModel.presentLocation))
+            mapViewModel.setCameraPositionState(mapViewModel.presentLocation)
+            called.invoke()
         }
     }
 }
@@ -200,10 +207,6 @@ private fun MapClustering(cameraPositionState: CameraPositionState, items : List
             clusterManager?.onCameraIdle()
         }
     }
-}
-
-private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
-    return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
 }
 
 @Composable

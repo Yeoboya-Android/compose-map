@@ -1,5 +1,6 @@
 plugins {
     id(ProjectPlugins.BASE_PLUGIN)
+    id(ProjectPlugins.PARCELIZE)
 }
 
 dependencies {

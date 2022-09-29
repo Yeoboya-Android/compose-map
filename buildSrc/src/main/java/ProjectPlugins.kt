@@ -4,6 +4,7 @@ object ProjectPlugins {
     const val HILT_GRADLE = "dagger.hilt.android.plugin"
     const val KAPT = "kapt"
     const val SECRET_GRADLE = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
+    const val PARCELIZE = "kotlin-parcelize"
 
     /** Gradle Convention Plugins */
     const val BASE_PLUGIN = "base-script-plugin"

@@ -25,6 +25,7 @@ object RoomModule {
                 { sqlQuery, _ -> Log.i("qwe123", "sqlQuery: $sqlQuery") },
                 Executors.newSingleThreadExecutor()
             )
+            .fallbackToDestructiveMigration()
             .build()
 
     @Singleton

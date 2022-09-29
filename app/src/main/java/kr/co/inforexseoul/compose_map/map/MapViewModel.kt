@@ -7,8 +7,12 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kr.co.inforexseoul.common_model.test_model.StationInfo
 import kr.co.inforexseoul.compose_map.BuildConfig
@@ -33,10 +37,25 @@ class MapViewModel @Inject constructor(
     // 위도 경도 리스트
     val stationMap : HashMap<Int, Pair<Double, Double>> = HashMap()
 
+    private val _cameraPositionState = MutableStateFlow(getCameraPosition(presentLocation))
+    val cameraPositionState = _cameraPositionState.asStateFlow()
+
+    fun setCameraPositionState(x: Double, y: Double) {
+        _cameraPositionState.value = getCameraPosition(Pair(x, y))
+    }
+
+    fun setCameraPositionState(pair: Pair<Double, Double>) {
+        _cameraPositionState.value = getCameraPosition(pair)
+    }
+
     fun stationListToMap() {
         stationList.forEachIndexed { index, info ->
             stationMap[index] = Pair(info.latitude, info.longitude)
         }
+    }
+
+    fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
+        return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
     }
 
     @SuppressLint("MissingPermission")

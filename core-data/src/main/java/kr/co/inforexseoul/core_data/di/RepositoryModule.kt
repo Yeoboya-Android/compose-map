@@ -23,10 +23,10 @@ interface RepositoryModule {
     @Binds
     fun bindsMapRepository(
         mapRepository: MapRepositoryImpl
-    ) : MapRepository
+    ): MapRepository
 
     @Binds
     fun bindsDistrictRepository(
         districtRepository: DistrictRepositoryImpl
-    ) : DistrictRepository
+    ): DistrictRepository
 }

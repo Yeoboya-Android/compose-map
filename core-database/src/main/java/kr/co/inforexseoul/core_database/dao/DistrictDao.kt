@@ -1,9 +1,6 @@
 package kr.co.inforexseoul.core_database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import kr.co.inforexseoul.core_database.entity.District
 
@@ -17,6 +14,15 @@ interface DistrictDao {
             "ORDER BY ABS(latitude - :latitude) + ABS(longitude - :longitude) ASC " +
             "LIMIT 1")
     fun selectDistrict(latitude: Double, longitude: Double): Flow<District>
+
+    @Query("SELECT * FROM District WHERE district_name LIKE :word")
+    fun findDistrictNames(word: String): Flow<List<District>>
+
+    @Query("SELECT * FROM District WHERE recent_search_yn == 'y'")
+    fun selectRecentSearchDistricts(): Flow<List<District>>
+
+    @Update
+    suspend fun updateDistrict(district: District)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDistrictList(districtList: List<District>)
