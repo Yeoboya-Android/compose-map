@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,7 +29,10 @@ import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 
 @Composable
-fun TranslateScreen(translateViewModel: TranslateViewModel = viewModel()) {
+fun TranslateScreen(
+    translateViewModel: TranslateViewModel = viewModel(),
+    appbarTitle: MutableState<@Composable () -> Unit>
+) {
 
     val apiItemList = arrayListOf<String>().apply {
         add("Firebase ML Kit")
@@ -56,6 +60,10 @@ fun TranslateScreen(translateViewModel: TranslateViewModel = viewModel()) {
         }
     }
 
+    appbarTitle.value = {
+        APISelector(apiText, apiItemList)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +73,6 @@ fun TranslateScreen(translateViewModel: TranslateViewModel = viewModel()) {
                 })
             }
     ) {
-        APISelector(apiText, apiItemList)
 
         LanguageSelector(
             sourceLanguage = sourceLanguage,
@@ -107,40 +114,40 @@ fun TranslateScreen(translateViewModel: TranslateViewModel = viewModel()) {
 fun APISelector(apiText: MutableState<String>, itemList: ArrayList<String>) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier = Modifier.fillMaxWidth().offset(x = (-32).dp)
     ) {
         var isExpanded by remember { mutableStateOf(false) }
-
-        Row(modifier = Modifier.weight(1f)) {
-            var buttonSize by remember { mutableStateOf(Size.Zero) }
-            StrokeButton(
-                text = apiText.value,
-                modifier = Modifier
-                    .weight(1f)
-                    .onGloballyPositioned {
-                        buttonSize = it.size.toSize()
+        var buttonSize by remember { mutableStateOf(Size.Zero) }
+        Text(
+            text = apiText.value,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .weight(1f)
+                .onGloballyPositioned {
+                    buttonSize = it.size.toSize()
+                }
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    isExpanded = true
+                }
+        )
+        DropdownMenu(
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { buttonSize.width.toDp() })
+                .background(MaterialTheme.colors.background)
+        ) {
+            itemList.forEach {
+                DropdownMenuItem(
+                    onClick = {
+                        apiText.value = it
+                        isExpanded = false
                     }
-            ) {
-                isExpanded = true
-            }
-            DropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { buttonSize.width.toDp() })
-                    .background(MaterialTheme.colors.background)
-            ) {
-                itemList.forEach {
-                    DropdownMenuItem(
-                        onClick = {
-                            apiText.value = it
-                            isExpanded = false
-                        }
-                    ) {
-                        Text(it)
-                    }
+                ) {
+                    Text(it)
                 }
             }
         }

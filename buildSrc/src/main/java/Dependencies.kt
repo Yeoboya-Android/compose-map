@@ -46,6 +46,7 @@ object Libs {
         const val COMPOSE_RUNTIME = "androidx.compose.runtime:runtime:$COMPOSE_VERSION"
         const val COMPOSE_COMPILER = "androidx.compose.compiler:compiler:1.3.1"
         const val COMPOSE_SYSTEM_UI = "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+        const val COMPOSE_NAVIGATION = "androidx.navigation:navigation-compose:2.4.1"
 
         /** DataBase */
         const val ROOM = "androidx.room:room-ktx:$ROOM_VERSION"

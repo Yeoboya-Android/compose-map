@@ -14,6 +14,7 @@ internal val appDependencies: List<DependencyType>
         DebugImplementation(Libs.Androidx.COMPOSE_UI_TOOLING),
         DebugImplementation(Libs.Androidx.COMPOSE_MANIFEST),
         Api(Libs.Coil.COIL),
+        Implementation(Libs.Androidx.COMPOSE_NAVIGATION),
 
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),

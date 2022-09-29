@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">compose_map</string>
+    <string name="app_name">컴포즈맵</string>
 
     <string name="snack_bar_close">닫기</string>
 
