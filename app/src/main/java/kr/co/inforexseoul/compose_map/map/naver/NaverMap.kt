@@ -18,13 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.*
 import com.naver.maps.map.overlay.OverlayImage
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
+import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
+import kr.co.inforexseoul.compose_map.map.CameraPositionWrapper
+import kr.co.inforexseoul.compose_map.map.MapState
 import kr.co.inforexseoul.compose_map.map.MapViewModel
 import kr.co.inforexseoul.compose_map.weather.WeatherView
 
@@ -39,9 +41,15 @@ fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
 
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
-        val cameraPositionState : CameraPositionState = rememberCameraPositionState {
-            position = getCameraPosition(mapViewModel.presentLocation)
+        val cameraPosition by mapViewModel.cameraPositionState.collectAsStateWithLifecycle(initial = CameraPositionWrapper.UnInit)
+        val cameraPositionState: CameraPositionState = rememberCameraPositionState {
+                position = mapViewModel.getNaverCameraPosition(mapViewModel.presentLocation)
         }
+
+        if (cameraPosition is CameraPositionWrapper.Naver)
+            cameraPositionState.position = (cameraPosition as CameraPositionWrapper.Naver).cameraPosition
+
+        Log.d("suk", "cameraPositionState: $cameraPositionState")
 
         Box(Modifier.fillMaxSize()) {
             NaverMapView(
@@ -71,10 +79,7 @@ fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
                 }
             }
         }
-        GetPresentLocation(reqLastLocation, mapViewModel) {
-            cameraPositionState.position = it
-            reqLastLocation = false
-        }
+        GetPresentLocation(reqLastLocation, mapViewModel) { reqLastLocation = false }
     }
 }
 
@@ -131,11 +136,16 @@ private fun NaverMapView(
  * 현재 위치 가져오기
  */
 @Composable
-private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewModel, called : (CameraPosition) -> Unit) {
-    if(reqLastLocation) {
+private fun GetPresentLocation(
+    reqLastLocation: Boolean,
+    mapViewModel: MapViewModel,
+    called: () -> Unit
+) {
+    if (reqLastLocation) {
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
-            called.invoke(getCameraPosition(mapViewModel.presentLocation))
+            mapViewModel.setCameraPositionState(MapState.NaverMap, mapViewModel.presentLocation)
+            called.invoke()
         }
     }
 }
@@ -159,9 +169,4 @@ private fun GetMarkerInCameraBound(cameraPositionState: CameraPositionState, map
             }
         }
     }
-}
-
-
-private fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
-    return CameraPosition(LatLng(location.first, location.second), 15.0)
 }

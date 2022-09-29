@@ -46,6 +46,9 @@ fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
                     onClick = { searchDialogOpen.targetState = true }
                 )
                 CustomToggleGroup(mapViewModel.list) { text ->
+                    searchWord = ""
+                    mapViewModel.setCameraPositionState(CameraPositionWrapper.UnInit)
+
                     when (text) {
                         "Google Map" -> MapState.GoogleMap
                         "Naver Map" -> MapState.NaverMap
@@ -57,7 +60,7 @@ fun MapScreen(mapViewModel: MapViewModel = viewModel()) {
     }
     SearchDialog(searchDialogOpen = searchDialogOpen) { district ->
         searchWord = district.districtName
-        mapViewModel.setCameraPositionState(district.latitude, district.longitude)
+        mapViewModel.setCameraPositionState(mapState, district.latitude, district.longitude)
     }
 }
 

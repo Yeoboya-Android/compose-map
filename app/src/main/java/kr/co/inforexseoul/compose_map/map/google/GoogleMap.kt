@@ -27,6 +27,8 @@ import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
+import kr.co.inforexseoul.compose_map.map.CameraPositionWrapper
+import kr.co.inforexseoul.compose_map.map.MapState
 import kr.co.inforexseoul.compose_map.map.MapViewModel
 import kr.co.inforexseoul.compose_map.weather.WeatherView
 
@@ -42,13 +44,11 @@ fun OpenGoogleMap(
         isMapLoaded = false,
         reqLastLocation = false,
         clusterData = ClusterData(LatLng(0.0, 0.0), "", ""),
-        cameraPositionState = CameraPositionState(position = mapViewModel.getCameraPosition(mapViewModel.presentLocation))
+        cameraPositionState = CameraPositionState(position = mapViewModel.getGoogleCameraPosition(mapViewModel.presentLocation))
     )
 ) {
     val position by mapViewModel.cameraPositionState.collectAsStateWithLifecycle(
-        initial = mapViewModel.getCameraPosition(
-            mapViewModel.presentLocation
-        )
+        initial = CameraPositionWrapper.UnInit
     )
 
     MainTheme {
@@ -88,7 +88,9 @@ fun OpenGoogleMap(
             stateHolder.reqLastLocation,
             mapViewModel
         ) { stateHolder.reqLastLocation = false }
-        stateHolder.cameraPositionState.position = position
+
+        if (position is CameraPositionWrapper.Google)
+            stateHolder.cameraPositionState.position = (position as CameraPositionWrapper.Google).cameraPosition
     }
 }
 
@@ -147,7 +149,7 @@ private fun GetPresentLocation(reqLastLocation : Boolean, mapViewModel: MapViewM
     if(reqLastLocation){
         CheckPermission(permissions = locationPermissions) {
             mapViewModel.requestLocation()
-            mapViewModel.setCameraPositionState(mapViewModel.presentLocation)
+            mapViewModel.setCameraPositionState(MapState.GoogleMap, mapViewModel.presentLocation)
             called.invoke()
         }
     }

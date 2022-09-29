@@ -30,22 +30,35 @@ class MapViewModel @Inject constructor(
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     val list = listOf("Google Map", "Naver Map")
+
     // default - 완도
     var presentLocation = Pair(34.28, 126.74)
-    // 정류장 리스트
-    var stationList : List<StationInfo> = listOf()
-    // 위도 경도 리스트
-    val stationMap : HashMap<Int, Pair<Double, Double>> = HashMap()
 
-    private val _cameraPositionState = MutableStateFlow(getCameraPosition(presentLocation))
+    // 정류장 리스트
+    var stationList: List<StationInfo> = listOf()
+
+    // 위도 경도 리스트
+    val stationMap: HashMap<Int, Pair<Double, Double>> = HashMap()
+
+    private val _cameraPositionState = MutableStateFlow<CameraPositionWrapper>(CameraPositionWrapper.UnInit)
     val cameraPositionState = _cameraPositionState.asStateFlow()
 
-    fun setCameraPositionState(x: Double, y: Double) {
-        _cameraPositionState.value = getCameraPosition(Pair(x, y))
+    fun setCameraPositionState(mapState: MapState, latitude: Double, longitude: Double) {
+        _cameraPositionState.value = when (mapState) {
+            MapState.GoogleMap -> CameraPositionWrapper.Google(latitude, longitude)
+            MapState.NaverMap -> CameraPositionWrapper.Naver(latitude, longitude)
+        }
     }
 
-    fun setCameraPositionState(pair: Pair<Double, Double>) {
-        _cameraPositionState.value = getCameraPosition(pair)
+    fun setCameraPositionState(mapState: MapState, pair: Pair<Double, Double>) {
+        _cameraPositionState.value = when (mapState) {
+            MapState.GoogleMap -> CameraPositionWrapper.Google(pair.first, pair.second)
+            MapState.NaverMap -> CameraPositionWrapper.Naver(pair.first, pair.second)
+        }
+    }
+
+    fun setCameraPositionState(cameraPositionWrapper: CameraPositionWrapper) {
+        _cameraPositionState.value = cameraPositionWrapper
     }
 
     fun stationListToMap() {
@@ -54,13 +67,22 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getCameraPosition(location : Pair<Double, Double>) : CameraPosition {
+    fun getGoogleCameraPosition(location: Pair<Double, Double>): CameraPosition {
         return CameraPosition.fromLatLngZoom(LatLng(location.first, location.second), 15f)
+    }
+
+    fun getNaverCameraPosition(location: Pair<Double, Double>): com.naver.maps.map.CameraPosition {
+        return com.naver.maps.map.CameraPosition(
+            com.naver.maps.geometry.LatLng(
+                location.first,
+                location.second
+            ), 15.0
+        )
     }
 
     @SuppressLint("MissingPermission")
     fun requestLocation() {
-        if(!this::fusedLocationProviderClient.isInitialized) {
+        if (!this::fusedLocationProviderClient.isInitialized) {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
             val locationRequest = LocationRequest.create().apply {
@@ -81,7 +103,10 @@ class MapViewModel @Inject constructor(
         }
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
-                Log.d("123123", "latitude : ${location.latitude}, longitude : ${location.longitude}")
+                Log.d(
+                    "123123",
+                    "latitude : ${location.latitude}, longitude : ${location.longitude}"
+                )
                 presentLocation = Pair(location.latitude, location.longitude)
             } else {
                 val locationRequest = LocationRequest.create().apply {
@@ -91,19 +116,51 @@ class MapViewModel @Inject constructor(
                 val locationCallback = object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {
                         val lastLocation = locationResult.lastLocation ?: return
-                        Log.d("123123", "v2 latitude : ${lastLocation.latitude}, longitude : ${lastLocation.longitude}")
+                        Log.d(
+                            "123123",
+                            "v2 latitude : ${lastLocation.latitude}, longitude : ${lastLocation.longitude}"
+                        )
                         presentLocation = Pair(lastLocation.latitude, lastLocation.longitude)
                     }
                 }
-                fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+                fusedLocationProviderClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    null
+                )
             }
         }
     }
 
     val busStationState = getBusStationDataUseCase.invoke(BuildConfig.BUS_KEY).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = Result.Loading
-        )
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = Result.Loading
+    )
 
+}
+
+sealed interface CameraPositionWrapper {
+
+    object UnInit : CameraPositionWrapper
+
+    data class Google(val latitude: Double, val longitude: Double) : CameraPositionWrapper {
+        val cameraPosition: CameraPosition
+            get() = CameraPosition.fromLatLngZoom(
+                LatLng(
+                    latitude,
+                    longitude
+                ), 15f
+            )
+    }
+
+    data class Naver(val latitude: Double, val longitude: Double) : CameraPositionWrapper {
+        val cameraPosition: com.naver.maps.map.CameraPosition
+            get() = com.naver.maps.map.CameraPosition(
+                com.naver.maps.geometry.LatLng(
+                    latitude,
+                    longitude
+                ), 15.0
+            )
+    }
 }
