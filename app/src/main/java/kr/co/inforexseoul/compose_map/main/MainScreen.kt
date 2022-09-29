@@ -55,6 +55,7 @@ fun MainScreen() {
             topBar = { MainTopAppBar(appbarTitle.value, openDrawer) },
             scaffoldState = scaffoldState,
             drawerShape = RectangleShape,
+            drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 Drawer { route ->
                     scope.launch {
@@ -64,8 +65,7 @@ fun MainScreen() {
                         launchSingleTop = true
                     }
                 }
-            },
-            drawerGesturesEnabled = true
+            }
         ) {
             NavHost(
                 navController = navController,
