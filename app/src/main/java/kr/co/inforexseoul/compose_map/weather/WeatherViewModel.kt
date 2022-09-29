@@ -151,13 +151,4 @@ class WeatherViewModel @Inject constructor(
         val baseTimeMillis = System.currentTimeMillis() - 3600000
         return SimpleDateFormat(pattern).format(Date(baseTimeMillis))
     }
-
-    /*fun getDistrictState(latitude: Double, longitude: Double): StateFlow<Result<District>> {
-        Log.d("qwe123", "WeatherViewModel.getDistrictState():::")
-        return selectDistrictUseCase.invoke(latitude, longitude).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = Result.Loading
-        )
-    }*/
 }

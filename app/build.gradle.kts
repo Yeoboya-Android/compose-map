@@ -3,6 +3,7 @@ plugins {
     id(ProjectPlugins.JETBRAINS_ANDROID)
     id(ProjectPlugins.HILT_GRADLE)
     id(ProjectPlugins.SECRET_GRADLE)
+    id(ProjectPlugins.GOOGLE_SERVICES)
     kotlin(ProjectPlugins.KAPT)
 }
 

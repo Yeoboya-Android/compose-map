@@ -38,6 +38,10 @@ internal val appDependencies: List<DependencyType>
 
         Implementation(Libs.Etc.JEXCELAPI),
 
+        /* 번역 */
+        Implementation(Libs.Google.GOOGLE_LANGUAGE),
+        Implementation(Libs.Google.GOOGLE_LANGUAGE_TRANSLATE),
+
         AndroidTestImplementation(Libs.Androidx.JUNIT),
         AndroidTestImplementation(Libs.Androidx.ESPRESSO_CORE),
 

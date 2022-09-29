@@ -9,6 +9,15 @@ import kr.co.inforexseoul.core_network.datasource.*
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataSourceModule {
+
+    /**
+     * 번역 관련 API
+     */
+    @Binds
+    fun bindsPapagoRemoteDataSource(
+        papagoRemoteDataSourceImpl: PapagoRemoteDataSourceImpl
+    ): PapagoRemoteDataSource
+
     /**
      * 날씨 관련 API
      */

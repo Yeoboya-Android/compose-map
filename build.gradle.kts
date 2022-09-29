@@ -8,6 +8,7 @@ buildscript {
         classpath(Libs.JetBrains.KOTLIN_GRADLE)
         classpath(Libs.Hilt.HILT_GRADLE_PLUGIN)
         classpath(Libs.Google.SECRET_GRADLE_PLUGIN)
+        classpath(Libs.Google.GOOGLE_GMS_SERVICE)
     }
 }
 

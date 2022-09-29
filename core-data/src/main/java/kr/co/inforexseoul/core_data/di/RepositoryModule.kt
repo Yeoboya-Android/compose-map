@@ -29,4 +29,9 @@ interface RepositoryModule {
     fun bindsDistrictRepository(
         districtRepository: DistrictRepositoryImpl
     ) : DistrictRepository
+
+    @Binds
+    fun bindsPapagoRepository(
+        papagoRepository: PapagoRepositoryImpl
+    ) : PapagoRepository
 }

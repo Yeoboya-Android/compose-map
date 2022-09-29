@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53638100541",
+    "project_id": "composemap-a01b3",
+    "storage_bucket": "composemap-a01b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53638100541:android:9acd87f2485ce302d99c54",
+        "android_client_info": {
+          "package_name": "kr.co.inforexseoul.compose_map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53638100541-d7a8coamr0onr6uio7rgoskj7687iim3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABxEnfJ-kBr9YX0-PH0y35h6o4xHxLaRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53638100541-d7a8coamr0onr6uio7rgoskj7687iim3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

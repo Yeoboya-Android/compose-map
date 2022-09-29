@@ -27,7 +27,6 @@ data class VillageForecastItems(
 
         val ptyRainRange = listOf(1, 5)
         val ptySnowRange = listOf(2, 3, 6, 7)
-        val skyCloudsRange = listOf(3, 4)
 
         val ptyList = item.sortItemList("PTY")
         val skyList = item.sortItemList("SKY")
@@ -40,7 +39,7 @@ data class VillageForecastItems(
             val condition = when {
                 ptyValue > 0 && ptyValue in ptyRainRange -> WeatherCondition.Rain
                 ptyValue > 0 && ptyValue in ptySnowRange -> WeatherCondition.Snow
-                skyValue > 0 && skyValue in skyCloudsRange -> WeatherCondition.Clouds
+                skyValue > 0 && skyValue == 4 -> WeatherCondition.Clouds
                 else -> WeatherCondition.Clear
             }
             val date = String.format(

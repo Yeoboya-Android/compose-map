@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.co.inforexseoul.core_network.service.MapApiService
 import kr.co.inforexseoul.core_network.service.OpenWeatherApiService
+import kr.co.inforexseoul.core_network.service.PapagoApiService
 import kr.co.inforexseoul.core_network.service.VillageForecastApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -20,6 +21,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    // 번역
+    private const val baseUrlPapago = "https://openapi.naver.com/v1/papago/"
 
     // 날씨
     private const val baseUrlVillageForecast = "http://apis.data.go.kr/"
@@ -68,5 +72,10 @@ object NetworkModule {
     @Provides
     fun providesVillageForecastApiService(retrofit: Retrofit.Builder): VillageForecastApiService =
         retrofit.baseUrl(baseUrlVillageForecast).build().create(VillageForecastApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesPapagoApiService(retrofit: Retrofit.Builder): PapagoApiService =
+        retrofit.baseUrl(baseUrlPapago).build().create(PapagoApiService::class.java)
 
 }
