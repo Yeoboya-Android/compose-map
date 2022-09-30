@@ -47,6 +47,10 @@ object Libs {
         const val COMPOSE_COMPILER = "androidx.compose.compiler:compiler:1.3.1"
         const val COMPOSE_SYSTEM_UI = "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
+        /** 페이징 */
+        const val COMPOSE_PAGING = "androidx.paging:paging-compose:1.0.0-alpha16"
+        const val COMMON_PAGING = "androidx.paging:paging-runtime-ktx:3.1.1"
+
         /** DataBase */
         const val ROOM = "androidx.room:room-ktx:$ROOM_VERSION"
         const val ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"

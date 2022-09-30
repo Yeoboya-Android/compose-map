@@ -5,8 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -29,8 +27,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kr.co.inforexseoul.common_ui.theme.MainTheme
+import kr.co.inforexseoul.common_util.extension.TitleDecorator
+import kr.co.inforexseoul.common_util.extension.group
+import kr.co.inforexseoul.common_util.permission.CheckPermission
+import kr.co.inforexseoul.common_util.permission.recordPermissions
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.common_util.ui.rememberKeyboardVisibleAsState
 import kr.co.inforexseoul.compose_map.R
@@ -126,16 +129,6 @@ private fun RowScope.SttButton(speechRecognizerDialogOpen: MutableTransitionStat
     }
 }
 
-private fun LazyListScope.groupTitle(title: String) {
-    item {
-        Text(
-            text = title,
-            fontSize = 20.sp,
-            fontStyle = FontStyle.Italic
-        )
-    }
-}
-
 @Composable
 private fun RecentSearchList(
     searchViewModel: SearchViewModel = viewModel(),
@@ -146,12 +139,14 @@ private fun RecentSearchList(
     )
     (recentSearchDistrictState as? Result.Success<List<District>>)?.data?.also { recentSearchList ->
         LazyColumn {
-            groupTitle("최근 검색")
-            items(recentSearchList) { district ->
+            group(
+                titleDecorator = makeSearchGroupTitleDecorator("최근 검색"),
+                items = recentSearchList
+            ) { district ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(70.dp, Dp.Infinity),
+                        .heightIn(30.dp, Dp.Infinity),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -177,29 +172,39 @@ private fun RecentSearchList(
     }
 }
 
+private fun makeSearchGroupTitleDecorator(title: String): TitleDecorator = TitleDecorator(
+    text = title,
+    fontSize = 20.sp,
+    fontStyle = FontStyle.Italic,
+)
+
 @Composable
 fun SearchResultList(
     text: State<String>,
     searchViewModel: SearchViewModel = viewModel(),
     onClick: (District) -> Unit
 ) {
-    val keywordDistrictListState by searchViewModel.keywordDistrictListState.collectAsStateWithLifecycle(
-        initial = Result.Loading
-    )
+    val keywordDistrictList = searchViewModel.searchKeywordTextState.collectAsLazyPagingItems()
     if (text.value.isNotEmpty()) {
-        searchViewModel.findAddress(text.value)
-        (keywordDistrictListState as? Result.Success<List<District>>)?.data?.also { list ->
-            LazyColumn {
-                groupTitle("검색결과")
-                items(list) { district ->
+        searchViewModel.setKeyword(text.value)
+        LazyColumn(verticalArrangement = Arrangement.Center) {
+            group(
+                titleDecorator = makeSearchGroupTitleDecorator("검색결과"),
+                items = keywordDistrictList
+            ) { district ->
+                if (district != null) {
                     Text(
                         text = district.districtName,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 2,
-                        modifier = Modifier.clickable {
-                            searchViewModel.addRecentSearchDistrict(district)
-                            onClick.invoke(district)
-                        }
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(30.dp)
+                            .clickable {
+                                searchViewModel.addRecentSearchDistrict(district)
+                                onClick.invoke(district)
+                            }
                     )
                 }
             }
@@ -230,7 +235,6 @@ fun SearchLayout(
 
                 /* 검색 Input Text Clear 버튼 */
                 ClearButton(text)
-                searchViewModel.findAddress(text.value)
             }
 
             /* 검색 결과 리스트 */
@@ -242,8 +246,8 @@ fun SearchLayout(
     }
 
     if (speechRecognizerDialogOpen.targetState) {
-        SpeechRecognizerDialog(speechRecognizerDialogOpen) { result ->
-            text.value = result
+        CheckPermission(permissions = recordPermissions) {
+            SpeechRecognizerDialog(speechRecognizerDialogOpen) { text.value = it }
         }
     }
 }

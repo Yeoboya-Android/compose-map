@@ -15,6 +15,9 @@ internal val appDependencies: List<DependencyType>
         DebugImplementation(Libs.Androidx.COMPOSE_MANIFEST),
         Api(Libs.Coil.COIL),
 
+        /* 페이징 */
+        Implementation(Libs.Androidx.COMPOSE_PAGING),
+
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),
         Implementation(Libs.JetBrains.COROUTINE_CORE),
@@ -69,6 +72,9 @@ internal val commonUtilDependencies: List<DependencyType>
 
         /* 컴포즈 */
         Implementation(Libs.Androidx.COMPOSE_ACTIVITY),
+
+        /* 페이징 */
+        Implementation(Libs.Androidx.COMPOSE_PAGING),
 
         /* 권한 */
         Implementation(Libs.Google.PERMISSION),
@@ -137,6 +143,9 @@ internal val coreDataDependencies: List<DependencyType>
         /* 힐트 */
         Implementation(Libs.Hilt.HILT_ANDROID),
         Kapt(Libs.Hilt.HILT_ANDROID_COMPILER),
+
+        /* 페이징*/
+        Implementation(Libs.Androidx.COMMON_PAGING),
 
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),

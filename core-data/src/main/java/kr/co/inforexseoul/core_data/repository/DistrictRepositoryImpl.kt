@@ -22,10 +22,6 @@ class DistrictRepositoryImpl @Inject constructor(
         return districtDao.selectDistrict(latitude, longitude)
     }
 
-    override fun findDistrictNames(word: String): Flow<List<District>> {
-        return districtDao.findDistrictNames(word)
-    }
-
     override fun getRecentSearchDistricts(): Flow<List<District>> {
         return districtDao.selectRecentSearchDistricts()
     }
@@ -36,6 +32,10 @@ class DistrictRepositoryImpl @Inject constructor(
 
     override fun updateDeleteRecentSearchDistrict(district: District): Flow<Unit> = flow {
         emit(districtDao.updateDistrict(district))
+    }
+
+    override fun getDistrictPageNames(keyword: String, index: Int, loadSize: Int): List<District> {
+        return districtDao.getDistrictPageNames(keyword, index, loadSize)
     }
 
 }
