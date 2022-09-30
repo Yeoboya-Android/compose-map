@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">compose_map</string>
     <string name="snack_bar_close">close</string>
+
+    <string name="search_btn">Search 🔎</string>
+
     <string name="speech_error_message_1">network timeout</string>
     <string name="speech_error_message_2">network error</string>
     <string name="speech_error_message_3">audio issue</string>
@@ -16,4 +19,17 @@
     <string name="map_google">Google Map</string>
     <string name="map_naver">Naver Map</string>
     <string name="place_db_update">Place DB Update Complete</string>
+
+    <string name="drawer_tmp_msg">I have nothing to put in.</string>
+
+    <string name="drawer_title_map">Map</string>
+    <string name="drawer_title_translate">Translator</string>
+
+    <string name="translate_language_ko">Korean</string>
+    <string name="translate_language_en">English</string>
+    <string name="translate_language_zh">Chinese</string>
+    <string name="translate_language_ja">Japanese</string>
+    <string name="translate_language_fr">French</string>
+
+    <string name="translate_button">to translate</string>
 </resources>

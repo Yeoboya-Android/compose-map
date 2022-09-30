@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -39,12 +40,21 @@ fun TranslateScreen(
         add("Naver Papago")
     }
 
-    val apiText = remember { mutableStateOf(apiItemList[0]) }
-    val sourceLanguage = remember { mutableStateOf("ko") }
-    val targetLanguage = remember { mutableStateOf("en") }
+    val itemList = arrayListOf<Pair<String, String>>().apply {
+        add(Pair(stringResource(R.string.translate_language_ko), "ko"))
+        add(Pair(stringResource(R.string.translate_language_en), "en"))
+        add(Pair(stringResource(R.string.translate_language_zh), "zh-CN"))
+        add(Pair(stringResource(R.string.translate_language_ja), "ja"))
+        add(Pair(stringResource(R.string.translate_language_fr), "fr"))
+    }
 
-    val sourceSelectorText = remember { mutableStateOf("한국어") }
-    val targetSelectorText = remember { mutableStateOf("영어") }
+    val apiText = remember { mutableStateOf(apiItemList[0]) }
+
+    val sourceSelectorText = remember { mutableStateOf(itemList[0].first) }
+    val targetSelectorText = remember { mutableStateOf(itemList[1].first) }
+
+    val sourceLanguage = remember { mutableStateOf(itemList[0].second) }
+    val targetLanguage = remember { mutableStateOf(itemList[1].second) }
 
     val sourceText = remember { mutableStateOf("") }
     val targetText = remember { mutableStateOf("") }
@@ -75,7 +85,8 @@ fun TranslateScreen(
             sourceLanguage = sourceLanguage,
             targetLanguage = targetLanguage,
             sourceSelectorText = sourceSelectorText,
-            targetSelectorText = targetSelectorText
+            targetSelectorText = targetSelectorText,
+            itemList = itemList
         )
 
         TranslateTextField(
@@ -88,7 +99,7 @@ fun TranslateScreen(
         Box(modifier = Modifier.weight(1f)) {
             FilledButton(
                 isEnabled = sourceText.value.isNotEmpty(),
-                text = "번역하기",
+                text = stringResource(R.string.translate_button),
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.BottomCenter)
@@ -111,7 +122,9 @@ fun TranslateScreen(
 fun APISelector(apiText: MutableState<String>, itemList: ArrayList<String>) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().offset(x = (-32).dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .offset(x = (-32).dp)
     ) {
         var isExpanded by remember { mutableStateOf(false) }
         var buttonSize by remember { mutableStateOf(Size.Zero) }
@@ -157,6 +170,7 @@ fun LanguageSelector(
     targetLanguage: MutableState<String>,
     sourceSelectorText: MutableState<String>,
     targetSelectorText: MutableState<String>,
+    itemList: ArrayList<Pair<String, String>>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -166,14 +180,6 @@ fun LanguageSelector(
     ) {
         var isSourceLanguageExpanded by remember { mutableStateOf(false) }
         var isTargetLanguageExpanded by remember { mutableStateOf(false) }
-
-        val itemList = arrayListOf<Pair<String, String>>().apply {
-            add(Pair("한국어", "ko"))
-            add(Pair("영어", "en"))
-            add(Pair("중국어", "zh-CN"))
-            add(Pair("일본어", "ja"))
-            add(Pair("프랑스어", "fr"))
-        }
 
         Row(modifier = Modifier.weight(1f)) {
             var buttonSize by remember { mutableStateOf(Size.Zero) }

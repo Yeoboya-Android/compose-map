@@ -12,10 +12,10 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,9 +23,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.get
 import kotlinx.coroutines.launch
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapScreen
@@ -51,6 +49,11 @@ fun MainScreen() {
                 scaffoldState.drawerState.open()
             }
         }
+        val closeDrawer: () -> Unit = {
+            scope.launch {
+                scaffoldState.drawerState.close()
+            }
+        }
 
         val appbarTitle: MutableState<@Composable () -> Unit> = remember { mutableStateOf({}) }
 
@@ -61,7 +64,7 @@ fun MainScreen() {
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 Drawer { route ->
-                    scope.launch { scaffoldState.drawerState.close() }
+                    closeDrawer()
                     route.takeIf { it != navController.currentDestination?.route }?.let {
                         navController.navigate(it) {
                             popUpTo(navController.graph.findStartDestination().id) {
@@ -141,7 +144,7 @@ fun Drawer(
                 .background(color = MaterialTheme.colors.primary, shape = CircleShape)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "넣을거 없어서 넣음", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(text = stringResource(R.string.drawer_tmp_msg), modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.height(80.dp))
         Divider(color = MaterialTheme.colors.onBackground, thickness = 1.dp)
         screens.forEach { screen ->
@@ -153,8 +156,12 @@ fun Drawer(
                         onDestinationClicked(screen.route)
                     }
             ) {
+                val title = when (screen) {
+                    is DrawerScreens.Map -> stringResource(R.string.drawer_title_map)
+                    is DrawerScreens.Translate -> stringResource(R.string.drawer_title_translate)
+                }
                 Text(
-                    text = screen.title,
+                    text = title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onBackground,
@@ -168,7 +175,7 @@ fun Drawer(
     }
 }
 
-sealed class DrawerScreens(val title: String, val route: String) {
-    object Map : DrawerScreens("지도", "map")
-    object Translate : DrawerScreens("번역", "translate")
+sealed class DrawerScreens(val route: String) {
+    object Map : DrawerScreens("map")
+    object Translate : DrawerScreens("translate")
 }

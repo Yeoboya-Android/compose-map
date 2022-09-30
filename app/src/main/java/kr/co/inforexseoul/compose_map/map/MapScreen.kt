@@ -73,7 +73,7 @@ fun SearchButton(
     searchDialogOpen: MutableTransitionState<Boolean>
 ) {
     TextButton(
-        text = searchWord.ifEmpty { "검색 🔎" },
+        text = searchWord.ifEmpty { stringResource(R.string.search_btn) },
         fontSize = UIConstants.FONT_SIZE_LARGE.sp,
         contentColor = MaterialTheme.colors.onPrimary,
         modifier = Modifier
