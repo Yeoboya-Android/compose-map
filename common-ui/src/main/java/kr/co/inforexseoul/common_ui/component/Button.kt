@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kr.co.inforexseoul.common_ui.UIConstants
+import kr.co.inforexseoul.common_ui.theme.Grey90
 
 
 @Composable
@@ -30,6 +31,8 @@ fun FilledButton(
     text: String,
     backgroundColor: Color = MaterialTheme.colors.primary,
     contentColor: Color = MaterialTheme.colors.onPrimary,
+    disabledBackgroundColor: Color = Grey90,
+    disabledContentColor: Color = Color.White,
     fontSize: TextUnit = UIConstants.FONT_SIZE_MEDIUM.sp,
     shape: Shape = RoundedCornerShape(UIConstants.BUTTON_RADIUS.dp),
     horizontalPadding: Dp = UIConstants.BUTTON_HORIZONTAL_PADDING.dp,
@@ -43,6 +46,8 @@ fun FilledButton(
         text = text,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        disabledBackgroundColor = disabledBackgroundColor,
+        disabledContentColor = disabledContentColor,
         borderColor = null,
         fontSize = fontSize,
         shape = shape,
@@ -60,6 +65,8 @@ fun StrokeButton(
     text: String,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = MaterialTheme.colors.primary,
+    disabledBackgroundColor: Color = Grey90,
+    disabledContentColor: Color = Color.White,
     borderColor: Color = MaterialTheme.colors.primary,
     fontSize: TextUnit = UIConstants.FONT_SIZE_MEDIUM.sp,
     shape: Shape = RoundedCornerShape(UIConstants.BUTTON_RADIUS.dp),
@@ -74,6 +81,8 @@ fun StrokeButton(
         text = text,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        disabledBackgroundColor = disabledBackgroundColor,
+        disabledContentColor = disabledContentColor,
         borderColor = borderColor,
         fontSize = fontSize,
         shape = shape,
@@ -91,6 +100,8 @@ fun TextButton(
     text: String,
     backgroundColor: Color = Color.Transparent,
     contentColor: Color = MaterialTheme.colors.onBackground,
+    disabledBackgroundColor: Color = Grey90,
+    disabledContentColor: Color = Color.White,
     fontSize: TextUnit = UIConstants.FONT_SIZE_MEDIUM.sp,
     shape: Shape = RectangleShape,
     horizontalPadding: Dp = UIConstants.BUTTON_HORIZONTAL_PADDING.dp,
@@ -104,6 +115,8 @@ fun TextButton(
         text = text,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        disabledBackgroundColor = disabledBackgroundColor,
+        disabledContentColor = disabledContentColor,
         borderColor = null,
         fontSize = fontSize,
         shape = shape,
@@ -121,6 +134,8 @@ private fun CommonButton(
     text: String,
     backgroundColor: Color,
     contentColor: Color,
+    disabledBackgroundColor: Color,
+    disabledContentColor: Color,
     borderColor: Color? = null,
     fontSize: TextUnit,
     shape: Shape,
@@ -148,7 +163,9 @@ private fun CommonButton(
             enabled = isEnabled,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = backgroundColor,
-                contentColor = contentColor
+                contentColor = contentColor,
+                disabledBackgroundColor = disabledBackgroundColor,
+                disabledContentColor = disabledContentColor
             ),
             contentPadding = PaddingValues(
                 horizontal = horizontalPadding,

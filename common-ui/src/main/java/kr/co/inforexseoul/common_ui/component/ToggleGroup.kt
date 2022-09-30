@@ -26,7 +26,7 @@ fun CustomToggleGroup(
     cornerShape: Shape = RoundedCornerShape(12.dp),
     paddingVertical: Dp = 12.dp,
     paddingHorizontal: Dp = 16.dp,
-    @ColorRes contentColor: Color = Color.White,
+    @ColorRes contentColor: Color = MaterialTheme.colors.onPrimary,
     @ColorRes selectedColor: Color = MaterialTheme.colors.primary,
     @ColorRes unSelectedColor: Color = Color.LightGray,
     clickable: (String) -> Unit

@@ -3,6 +3,7 @@ package kr.co.inforexseoul.compose_map.map
 import android.util.Log
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,7 +70,7 @@ fun SearchButton(
     TextButton(
         text = searchWord.ifEmpty { "검색" },
         fontSize = UIConstants.FONT_SIZE_LARGE.sp,
-        contentColor = Color.White,
+        contentColor = MaterialTheme.colors.onPrimary,
         modifier = Modifier.defaultMinSize(1.dp).fillMaxWidth().offset(x = (-32).dp),
         onClick = { searchDialogOpen.targetState = true }
     )

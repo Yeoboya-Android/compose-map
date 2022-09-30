@@ -115,12 +115,13 @@ private fun NaverMapView(
         modifier = modifier.padding(10.dp)
     ) {
         Button(
-            colors = ButtonDefaults.buttonColors(Color.White),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
             onClick = onClick
         ) {
             Icon(
                 painter = painterResource(R.drawable.my_location),
-                contentDescription = "presentLocation"
+                contentDescription = "presentLocation",
+                tint = MaterialTheme.colors.onBackground
             )
         }
     }

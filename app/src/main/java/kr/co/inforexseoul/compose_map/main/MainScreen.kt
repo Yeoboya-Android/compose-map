@@ -98,12 +98,12 @@ fun MainTopAppBar(
     TopAppBar(
         title = title,
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = Color.White,
+        contentColor = MaterialTheme.colors.onPrimary,
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    tint = Color.White,
+                    tint = MaterialTheme.colors.onPrimary,
                     contentDescription = "Menu"
                 )
             }
@@ -127,7 +127,7 @@ fun Drawer(
         Image(
             painter = painterResource(id = R.drawable.bus_station),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(color = Color.White),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colors.onPrimary),
             modifier = Modifier
                 .size(120.dp)
                 .align(Alignment.CenterHorizontally)
