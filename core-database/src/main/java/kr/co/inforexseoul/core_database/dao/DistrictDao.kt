@@ -15,11 +15,11 @@ interface DistrictDao {
             "LIMIT 1")
     fun selectDistrict(latitude: Double, longitude: Double): Flow<District>
 
-    @Query("SELECT * FROM District WHERE district_name LIKE :word")
-    fun findDistrictNames(word: String): Flow<List<District>>
-
     @Query("SELECT * FROM District WHERE recent_search_yn == 'y'")
     fun selectRecentSearchDistricts(): Flow<List<District>>
+
+    @Query("SELECT * FROM District WHERE district_name LIKE :keyword ORDER BY id DESC LIMIT :loadSize OFFSET :index * :loadSize")
+    fun getDistrictPageNames(keyword: String, index: Int, loadSize: Int): List<District>
 
     @Update
     suspend fun updateDistrict(district: District)

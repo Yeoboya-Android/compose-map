@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class District(
-    @PrimaryKey val districtId: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "district_id") val districtId: Long,
     @ColumnInfo(name = "district_name") val districtName: String,
     @ColumnInfo(name = "nx") val nx: Int,
     @ColumnInfo(name = "ny") val ny: Int,
