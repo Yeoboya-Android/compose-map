@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kr.co.inforexseoul.common_model.test_model.OpenWeatherForecastModel
 import kr.co.inforexseoul.common_model.test_model.VillageForecastItems
 import kr.co.inforexseoul.compose_map.BuildConfig
+import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_data.usecase.*
 import kr.co.inforexseoul.core_database.entity.District
@@ -107,7 +108,7 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             selectDistrictCountUseCase.invoke().collect { count ->
                 if (count <= 0) readDistrictExcel(insertDistrictUseCase)
-                else Toast.makeText(context, "지역 DB 업데이트 완료", Toast.LENGTH_SHORT).show()
+                else Toast.makeText(context, context.resources.getText(R.string.place_db_update), Toast.LENGTH_SHORT).show()
             }
         }
     }

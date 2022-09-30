@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">compose_map</string>
+    <string name="snack_bar_close">close</string>
+    <string name="speech_error_message_1">network timeout</string>
+    <string name="speech_error_message_2">network error</string>
+    <string name="speech_error_message_3">audio issue</string>
+    <string name="speech_error_message_4">server check</string>
+    <string name="speech_error_message_5">client issue</string>
+    <string name="speech_error_message_6">tiemout</string>
+    <string name="speech_error_message_7">word not found</string>
+    <string name="speech_error_message_8">already recording</string>
+    <string name="speech_error_message_9">no permission</string>
+    <string name="speech_error_message_else">unknown error</string>
+
+    <string name="map_google">Google Map</string>
+    <string name="map_naver">Naver Map</string>
+    <string name="place_db_update">Place DB Update Complete</string>
+</resources>

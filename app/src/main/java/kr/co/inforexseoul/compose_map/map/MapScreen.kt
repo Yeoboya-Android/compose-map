@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,6 +19,7 @@ import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
+import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.google.OpenGoogleMap
 import kr.co.inforexseoul.compose_map.map.naver.OpenNaverMap
 import kr.co.inforexseoul.compose_map.search.SearchDialog
@@ -41,15 +43,18 @@ fun MapScreen(
             appbarTitle.value = { SearchButton(searchWord, searchDialogOpen) }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                CustomToggleGroup(options =  mapViewModel.list) { text ->
+                val list = listOf(stringResource(id = R.string.map_google), stringResource(id = R.string.map_naver))
+                CustomToggleGroup(options =  list) { text ->
                     searchWord = ""
                     mapViewModel.setCameraPositionState(CameraPositionWrapper.UnInit)
 
                     when (text) {
-                        "Google Map" -> MapState.GoogleMap
-                        "Naver Map" -> MapState.NaverMap
+                        list[0] -> MapState.GoogleMap
+                        list[1] -> MapState.NaverMap
                         else -> null
                     }?.also { mapState = it }
                 }
@@ -71,7 +76,10 @@ fun SearchButton(
         text = searchWord.ifEmpty { "검색" },
         fontSize = UIConstants.FONT_SIZE_LARGE.sp,
         contentColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.defaultMinSize(1.dp).fillMaxWidth().offset(x = (-32).dp),
+        modifier = Modifier
+            .defaultMinSize(1.dp)
+            .fillMaxWidth()
+            .offset(x = (-32).dp),
         onClick = { searchDialogOpen.targetState = true }
     )
 }

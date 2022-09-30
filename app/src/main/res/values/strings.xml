@@ -14,4 +14,9 @@
     <string name="speech_error_message_8">이미 녹음 중</string>
     <string name="speech_error_message_9">권한 없음</string>
     <string name="speech_error_message_else">알 수 없는 문제</string>
+
+    <string name="map_google">구글 지도</string>
+    <string name="map_naver">네이버 지도</string>
+
+    <string name="place_db_update">지역 DB 업데이트 완료</string>
 </resources>
