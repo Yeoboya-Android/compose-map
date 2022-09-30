@@ -4,14 +4,23 @@ import android.speech.SpeechRecognizer
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.*
 import kr.co.inforexseoul.common_model.test_model.state.SpeechState
 import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
-import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.extension.stringList
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
@@ -44,17 +53,14 @@ fun SpeechRecognizer(
 
     LaunchedEffect(lifecycleOwner) {
         speechRecognizerViewModel.initRecognizer()
+
+        if (speechState is SpeechState.UnInit) {
+            speechRecognizerViewModel.startRecognizer()
+        }
     }
 
     DisposableEffect(lifecycleOwner) {
         onDispose { speechRecognizerViewModel.dispose() }
-    }
-
-    TextButton(text = "스타트!") {
-        if (speechState !is SpeechState.Operation)
-            speechRecognizerViewModel.startRecognizer()
-        else
-            showSnackBar = R.string.speech_error_message_8
     }
 
     when (speechState) {
@@ -87,5 +93,21 @@ fun SpeechRecognizer(
 
     if (showSnackBar != null) {
         Toast.makeText(context, stringResource(showSnackBar!!), Toast.LENGTH_SHORT).show()
+    }
+
+    Surface(color = Color.White, modifier = Modifier.fillMaxSize(2f)) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "듣고 있습니다.",
+                fontSize = 30.sp
+            )
+
+            val lottieComposition by rememberLottieComposition(LottieCompositionSpec.Asset("recording.json"))
+            val progress by animateLottieCompositionAsState(composition = lottieComposition, iterations = LottieConstants.IterateForever)
+            LottieAnimation(composition = lottieComposition, progress = { progress })
+        }
     }
 }

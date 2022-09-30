@@ -109,6 +109,10 @@ object Libs {
         const val JEXCELAPI = "net.sourceforge.jexcelapi:jxl:2.6.12"
     }
 
+    object Lottie {
+        const val LOTTIE_COMPOSE = "com.airbnb.android:lottie-compose:5.2.0"
+    }
+
     /** 테스트 라이브러리 */
     internal object Test {
         const val JUNIT = "junit:junit:4.13.2"

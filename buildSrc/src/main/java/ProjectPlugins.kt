@@ -10,4 +10,7 @@ object ProjectPlugins {
     /** Gradle Convention Plugins */
     const val BASE_PLUGIN = "base-script-plugin"
     const val COMPOSE_PLUGIN = "compose-script-plugin"
+
+    /** Repository */
+    const val SONATYPE_REPOSITORY = "https://oss.sonatype.org/content/repositories/snapshots/"
 }

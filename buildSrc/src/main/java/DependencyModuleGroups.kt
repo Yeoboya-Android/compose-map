@@ -42,6 +42,9 @@ internal val appDependencies: List<DependencyType>
 
         Implementation(Libs.Etc.JEXCELAPI),
 
+        /* 로티 */
+        Implementation(Libs.Lottie.LOTTIE_COMPOSE),
+
         /* 번역 */
         Implementation(Libs.Google.GOOGLE_LANGUAGE),
         Implementation(Libs.Google.GOOGLE_LANGUAGE_TRANSLATE),

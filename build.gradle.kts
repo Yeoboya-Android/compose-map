@@ -2,6 +2,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven(ProjectPlugins.SONATYPE_REPOSITORY)
     }
     dependencies {
         classpath(Libs.Google.ANDROID_BUILD_GRADLE)
