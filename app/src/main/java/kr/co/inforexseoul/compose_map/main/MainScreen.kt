@@ -20,9 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.get
 import kotlinx.coroutines.launch
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapScreen
@@ -58,11 +61,15 @@ fun MainScreen() {
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 Drawer { route ->
-                    scope.launch {
-                        scaffoldState.drawerState.close()
-                    }
-                    navController.navigate(route) {
-                        launchSingleTop = true
+                    scope.launch { scaffoldState.drawerState.close() }
+                    route.takeIf { it != navController.currentDestination?.route }?.let {
+                        navController.navigate(it) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 }
             }
