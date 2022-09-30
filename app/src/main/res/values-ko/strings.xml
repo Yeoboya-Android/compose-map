@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="map_google">구글 지도</string>
+    <string name="map_naver">네이버 지도</string>
+    <string name="place_db_update">지역 DB 업데이트 완료</string>
+</resources>
