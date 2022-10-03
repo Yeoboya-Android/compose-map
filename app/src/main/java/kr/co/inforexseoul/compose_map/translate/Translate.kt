@@ -86,6 +86,8 @@ fun TranslateScreen(
             targetLanguage = targetLanguage,
             sourceSelectorText = sourceSelectorText,
             targetSelectorText = targetSelectorText,
+            sourceText = sourceText,
+            targetText = targetText,
             itemList = itemList
         )
 
@@ -170,8 +172,11 @@ fun LanguageSelector(
     targetLanguage: MutableState<String>,
     sourceSelectorText: MutableState<String>,
     targetSelectorText: MutableState<String>,
+    sourceText: MutableState<String>,
+    targetText: MutableState<String>,
     itemList: ArrayList<Pair<String, String>>,
 ) {
+    Log.i("qwe123", "LanguageSelector():::")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -224,14 +229,15 @@ fun LanguageSelector(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) {
-                    val copySourceText = sourceSelectorText.value
-                    val copyTargetText = targetSelectorText.value
+                    val copySourceSelectorText = sourceSelectorText.value
+                    val copyTargetSelectorText = targetSelectorText.value
                     val copySourceLanguage = sourceLanguage.value
                     val copyTargetLanguage = targetLanguage.value
-                    sourceSelectorText.value = copyTargetText
-                    targetSelectorText.value = copySourceText
+                    sourceSelectorText.value = copyTargetSelectorText
+                    targetSelectorText.value = copySourceSelectorText
                     sourceLanguage.value = copyTargetLanguage
                     targetLanguage.value = copySourceLanguage
+                    sourceText.value = targetText.value
                 },
             colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
         )
