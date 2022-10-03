@@ -16,6 +16,9 @@ internal val appDependencies: List<DependencyType>
         Api(Libs.Coil.COIL),
         Implementation(Libs.Androidx.COMPOSE_NAVIGATION),
 
+        /* 페이징 */
+        Implementation(Libs.Androidx.COMPOSE_PAGING),
+
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),
         Implementation(Libs.JetBrains.COROUTINE_CORE),
@@ -38,6 +41,9 @@ internal val appDependencies: List<DependencyType>
         Implementation(Libs.Google.GSON),
 
         Implementation(Libs.Etc.JEXCELAPI),
+
+        /* 로티 */
+        Implementation(Libs.Lottie.LOTTIE_COMPOSE),
 
         /* 번역 */
         Implementation(Libs.Google.GOOGLE_LANGUAGE),
@@ -74,6 +80,9 @@ internal val commonUtilDependencies: List<DependencyType>
 
         /* 컴포즈 */
         Implementation(Libs.Androidx.COMPOSE_ACTIVITY),
+
+        /* 페이징 */
+        Implementation(Libs.Androidx.COMPOSE_PAGING),
 
         /* 권한 */
         Implementation(Libs.Google.PERMISSION),
@@ -142,6 +151,9 @@ internal val coreDataDependencies: List<DependencyType>
         /* 힐트 */
         Implementation(Libs.Hilt.HILT_ANDROID),
         Kapt(Libs.Hilt.HILT_ANDROID_COMPILER),
+
+        /* 페이징*/
+        Implementation(Libs.Androidx.COMMON_PAGING),
 
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),

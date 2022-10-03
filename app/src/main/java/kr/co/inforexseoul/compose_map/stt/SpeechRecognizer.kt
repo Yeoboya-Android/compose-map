@@ -1,47 +1,66 @@
 package kr.co.inforexseoul.compose_map.stt
 
 import android.speech.SpeechRecognizer
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.*
 import kr.co.inforexseoul.common_model.test_model.state.SpeechState
 import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
-import kr.co.inforexseoul.common_ui.component.MainSnackBar
-import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.extension.stringList
 import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 
 @Composable
 fun SpeechRecognizerDialog(
-    speechRecognizerDialogOpen: MutableTransitionState<Boolean> = MutableTransitionState(false),
+    speechRecognizerDialogOpen: MutableTransitionState<Boolean>,
     result: (String) -> Unit
 ) {
-    BottomSlideDialog(speechRecognizerDialogOpen) {
-        SpeechRecognizer { textList ->
-            speechRecognizerDialogOpen.targetState = false
-            result.invoke(textList.first())
+    if (speechRecognizerDialogOpen.targetState) {
+        BottomSlideDialog(speechRecognizerDialogOpen) {
+            SpeechRecognizer(speechRecognizerDialogOpen) { textList ->
+                speechRecognizerDialogOpen.targetState = false
+                result.invoke(textList.first())
+            }
         }
     }
 }
 
 @Composable
 fun SpeechRecognizer(
+    speechRecognizerDialogOpen: MutableTransitionState<Boolean>,
     speechRecognizerViewModel: SpeechRecognizerViewModel = viewModel(),
-    success: @Composable (List<String>) -> Unit
+    success: @Composable (List<String>) -> Unit,
 ) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle(initial = SpeechState.UnInit)
-    val scaffoldState = rememberScaffoldState()
     @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
 
-    TextButton(text = "스타트!") {
-        if (speechRecognizerViewModel.speechState.value !is SpeechState.Operation)
+    LaunchedEffect(lifecycleOwner) {
+        speechRecognizerViewModel.initRecognizer()
+
+        if (speechState is SpeechState.UnInit) {
             speechRecognizerViewModel.startRecognizer()
-        else
-            showSnackBar = R.string.speech_error_message_8
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        onDispose { speechRecognizerViewModel.dispose() }
     }
 
     when (speechState) {
@@ -64,18 +83,31 @@ fun SpeechRecognizer(
                 SpeechRecognizer.ERROR_SERVER -> R.string.speech_error_message_8
                 SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> R.string.speech_error_message_9
                 else -> R.string.speech_error_message_else
-            }.also { showSnackBar = it }
+            }.also { message ->
+                showSnackBar = message
+                speechRecognizerDialogOpen.targetState = false
+            }
         }
         else -> Unit
     }
 
     if (showSnackBar != null) {
-        MainSnackBar(
-            messageRes = showSnackBar!!,
-            actionLabel = stringResource(R.string.snack_bar_close),
-            scaffoldState = scaffoldState,
-            cancel = { showSnackBar = null },
-            success = { showSnackBar = null }
-        )
+        Toast.makeText(context, stringResource(showSnackBar!!), Toast.LENGTH_SHORT).show()
+    }
+
+    Surface(color = Color.White, modifier = Modifier.fillMaxSize(2f)) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "듣고 있습니다.",
+                fontSize = 30.sp
+            )
+
+            val lottieComposition by rememberLottieComposition(LottieCompositionSpec.Asset("recording.json"))
+            val progress by animateLottieCompositionAsState(composition = lottieComposition, iterations = LottieConstants.IterateForever)
+            LottieAnimation(composition = lottieComposition, progress = { progress })
+        }
     }
 }
