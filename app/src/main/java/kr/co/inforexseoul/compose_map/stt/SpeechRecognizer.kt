@@ -2,14 +2,16 @@ package kr.co.inforexseoul.compose_map.stt
 
 import android.speech.SpeechRecognizer
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -72,7 +74,6 @@ fun SpeechRecognizer(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
 
     LaunchedEffect(lifecycleOwner) {
         onInitRecognizer.invoke()
@@ -108,15 +109,11 @@ fun SpeechRecognizer(
                 SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> R.string.speech_error_message_9
                 else -> R.string.speech_error_message_else
             }.also { message ->
-                showSnackBar = message
+                Toast.makeText(context, stringResource(message), Toast.LENGTH_SHORT).show()
                 onDismiss.invoke()
             }
         }
         else -> Unit
-    }
-
-    if (showSnackBar != null) {
-        Toast.makeText(context, stringResource(showSnackBar!!), Toast.LENGTH_SHORT).show()
     }
 
     Surface(color = Color.White, modifier = Modifier.fillMaxSize(2f)) {
@@ -130,7 +127,10 @@ fun SpeechRecognizer(
             )
 
             val lottieComposition by rememberLottieComposition(LottieCompositionSpec.Asset("recording.json"))
-            val progress by animateLottieCompositionAsState(composition = lottieComposition, iterations = LottieConstants.IterateForever)
+            val progress by animateLottieCompositionAsState(
+                composition = lottieComposition,
+                iterations = LottieConstants.IterateForever
+            )
             LottieAnimation(composition = lottieComposition, progress = { progress })
         }
     }
