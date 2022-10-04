@@ -17,12 +17,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.*
 import kr.co.inforexseoul.common_model.test_model.state.SpeechState
 import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
 import kr.co.inforexseoul.common_util.extension.stringList
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 
 @Composable
@@ -40,6 +41,7 @@ fun SpeechRecognizerDialog(
     }
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun SpeechRecognizer(
     speechRecognizerDialogOpen: MutableTransitionState<Boolean>,
@@ -48,7 +50,7 @@ fun SpeechRecognizer(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle(initial = SpeechState.UnInit)
+    val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle()
     @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
 
     LaunchedEffect(lifecycleOwner) {

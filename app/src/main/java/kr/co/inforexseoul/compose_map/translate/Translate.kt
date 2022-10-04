@@ -1,7 +1,9 @@
 package kr.co.inforexseoul.compose_map.translate
 
 import android.util.Log
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -22,13 +24,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kr.co.inforexseoul.common_ui.component.FilledButton
 import kr.co.inforexseoul.common_ui.component.LoadingBar
 import kr.co.inforexseoul.common_ui.component.StrokeButton
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun TranslateScreen(
     translateViewModel: TranslateViewModel = viewModel(),
@@ -60,7 +64,7 @@ fun TranslateScreen(
     val targetText = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
-    val result by translateViewModel.translateState.collectAsStateWithLifecycle(TransLateState.UnInit)
+    val result by translateViewModel.translateState.collectAsStateWithLifecycle()
     when (result) {
         is TransLateState.UnInit -> Unit
         is TransLateState.Error -> Log.e("qwe123", "translate error")

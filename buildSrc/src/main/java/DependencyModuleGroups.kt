@@ -9,12 +9,14 @@ internal val appDependencies: List<DependencyType>
 
         /* 컴포즈 */
         Implementation(Libs.Androidx.COMPOSE_ACTIVITY),
-        Implementation(Libs.Androidx.COMPOSE_VIEW_MODEL),
+        Implementation(Libs.Androidx.COMPOSE_LIFECYCLE_VIEW_MODEL),
+        Implementation(Libs.Androidx.COMPOSE_LIFECYCLE_RUNTIME),
         AndroidTestImplementation(Libs.Androidx.COMPOSE_JUNIT),
         DebugImplementation(Libs.Androidx.COMPOSE_UI_TOOLING),
         DebugImplementation(Libs.Androidx.COMPOSE_MANIFEST),
-        Api(Libs.Coil.COIL),
         Implementation(Libs.Androidx.COMPOSE_NAVIGATION),
+
+        Api(Libs.Coil.COIL),
 
         /* 페이징 */
         Implementation(Libs.Androidx.COMPOSE_PAGING),
