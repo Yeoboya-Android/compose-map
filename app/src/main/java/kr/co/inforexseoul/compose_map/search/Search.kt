@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.flowOf
+import kr.co.inforexseoul.common_ui.DevicePreviews
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.core_database.entity.District
 
@@ -157,7 +158,7 @@ private fun SearchTextFieldPreview() {
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 private fun SearchLayoutPreview() {
     MainTheme {

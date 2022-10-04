@@ -60,7 +60,7 @@ fun SearchLayout(
                 SearchTextField(text = text, placeholder = "입력", modifier = Modifier.weight(3f))
 
                 /* 검색 Input Text Clear 버튼 */
-                ClearButton(text)
+                ClearButton(visible = text.value.isNotEmpty(), onClick = { text.value = "" })
             }
 
             /* 검색 결과 리스트 */
@@ -123,9 +123,9 @@ fun SearchTextField(
 }
 
 @Composable
-fun RowScope.ClearButton(text: MutableState<String>) {
-    if (text.value.isNotEmpty()) {
-        IconButton(onClick = { text.value = "" }) {
+fun RowScope.ClearButton(visible: Boolean = false, onClick: () -> Unit) {
+    if (visible) {
+        IconButton(onClick = onClick) {
             val clearIcon = painterResource(R.mipmap.ic_launcher_clear)
             Image(
                 painter = clearIcon,
