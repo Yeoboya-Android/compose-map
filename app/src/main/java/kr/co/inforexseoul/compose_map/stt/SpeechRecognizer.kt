@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.*
 import kr.co.inforexseoul.common_model.test_model.state.SpeechState
+import kr.co.inforexseoul.common_ui.DevicePreviews
 import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
 import kr.co.inforexseoul.common_util.extension.stringList
 import kr.co.inforexseoul.compose_map.R
@@ -29,52 +30,73 @@ import kr.co.inforexseoul.compose_map.R
 @Composable
 fun SpeechRecognizerDialog(
     speechRecognizerDialogOpen: MutableTransitionState<Boolean>,
-    result: (String) -> Unit
+    onResult: (String) -> Unit
 ) {
     if (speechRecognizerDialogOpen.targetState) {
         BottomSlideDialog(speechRecognizerDialogOpen) {
-            SpeechRecognizer(speechRecognizerDialogOpen) { textList ->
-                speechRecognizerDialogOpen.targetState = false
-                result.invoke(textList.first())
-            }
+            SpeechRoute(
+                onResult = onResult,
+                onDismiss = { speechRecognizerDialogOpen.targetState = false }
+            )
         }
     }
 }
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun SpeechRecognizer(
-    speechRecognizerDialogOpen: MutableTransitionState<Boolean>,
+fun SpeechRoute(
     speechRecognizerViewModel: SpeechRecognizerViewModel = viewModel(),
-    success: @Composable (List<String>) -> Unit,
+    onResult: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle()
+
+    SpeechRecognizer(
+        speechState = speechState,
+        onResult = onResult,
+        onDismiss = onDismiss,
+        onInitRecognizer = { speechRecognizerViewModel.initRecognizer() },
+        onStartRecognizer = { speechRecognizerViewModel.startRecognizer() },
+        onDispose = { speechRecognizerViewModel.dispose() },
+    )
+}
+
+@Composable
+fun SpeechRecognizer(
+    speechState: SpeechState,
+    onResult: (String) -> Unit = {},
+    onDismiss: () -> Unit = {},
+    onInitRecognizer: () -> Unit = {},
+    onStartRecognizer: () -> Unit = {},
+    onDispose: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val speechState by speechRecognizerViewModel.speechState.collectAsStateWithLifecycle()
     @StringRes var showSnackBar by remember { mutableStateOf<Int?>((null)) }
 
     LaunchedEffect(lifecycleOwner) {
-        speechRecognizerViewModel.initRecognizer()
+        onInitRecognizer.invoke()
 
         if (speechState is SpeechState.UnInit) {
-            speechRecognizerViewModel.startRecognizer()
+            onStartRecognizer.invoke()
         }
     }
 
     DisposableEffect(lifecycleOwner) {
-        onDispose { speechRecognizerViewModel.dispose() }
+        onDispose { onDispose.invoke() }
     }
 
     when (speechState) {
         is SpeechState.Completed.Success -> {
-            val textList = (speechState as SpeechState.Completed.Success)
-                .data.stringList(SpeechRecognizer.RESULTS_RECOGNITION)
+            val textList = speechState.data.stringList(SpeechRecognizer.RESULTS_RECOGNITION)
 
-            if (textList.isNotEmpty())
-                success.invoke(textList)
+            if (textList.isNotEmpty()) {
+                onResult.invoke(textList.first())
+            }
+            onDismiss.invoke()
         }
         is SpeechState.Completed.Fail -> {
-            when ((speechState as SpeechState.Completed.Fail).error) {
+            when (speechState.error) {
                 SpeechRecognizer.ERROR_AUDIO -> R.string.speech_error_message_1
                 SpeechRecognizer.ERROR_CLIENT -> R.string.speech_error_message_2
                 SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> R.string.speech_error_message_3
@@ -87,7 +109,7 @@ fun SpeechRecognizer(
                 else -> R.string.speech_error_message_else
             }.also { message ->
                 showSnackBar = message
-                speechRecognizerDialogOpen.targetState = false
+                onDismiss.invoke()
             }
         }
         else -> Unit
@@ -112,4 +134,12 @@ fun SpeechRecognizer(
             LottieAnimation(composition = lottieComposition, progress = { progress })
         }
     }
+}
+
+
+/** Preview */
+@DevicePreviews
+@Composable
+private fun SpeechPreview() {
+    SpeechRecognizer(SpeechState.UnInit)
 }
