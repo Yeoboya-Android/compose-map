@@ -7,10 +7,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kr.co.inforexseoul.common_model.test_model.BusStationInfo
 import kr.co.inforexseoul.common_ui.UIConstants
@@ -18,7 +19,6 @@ import kr.co.inforexseoul.common_ui.component.CustomToggleGroup
 import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.google.OpenGoogleMap
 import kr.co.inforexseoul.compose_map.map.naver.OpenNaverMap
@@ -99,9 +99,10 @@ private fun ScreenSwitch(
     content.invoke()
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun GetBusStationInfo(mapViewModel: MapViewModel, success: @Composable () -> Unit) {
-    val result by mapViewModel.busStationState.collectAsStateWithLifecycle(initial = Result.Loading)
+    val result by mapViewModel.busStationState.collectAsStateWithLifecycle()
 
     when (result) {
         is Result.Error -> {

@@ -12,11 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +26,6 @@ import com.google.maps.android.compose.*
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.CameraPositionWrapper
 import kr.co.inforexseoul.compose_map.map.MapState
@@ -37,6 +37,7 @@ private const val TAG = "GoogleMap"
 /**
  * 구글 지도
  */
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun OpenGoogleMap(
     mapViewModel: MapViewModel = viewModel(),
@@ -47,9 +48,7 @@ fun OpenGoogleMap(
         cameraPositionState = CameraPositionState(position = mapViewModel.getGoogleCameraPosition(mapViewModel.presentLocation))
     )
 ) {
-    val position by mapViewModel.cameraPositionState.collectAsStateWithLifecycle(
-        initial = CameraPositionWrapper.UnInit
-    )
+    val position by mapViewModel.cameraPositionState.collectAsStateWithLifecycle()
 
     MainTheme {
         GetAllMarker(mapViewModel = mapViewModel, items = stateHolder.items)

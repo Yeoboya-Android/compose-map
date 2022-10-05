@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.*
@@ -23,7 +25,6 @@ import com.naver.maps.map.overlay.OverlayImage
 import kr.co.inforexseoul.common_ui.theme.MainTheme
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.locationPermissions
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.CameraPositionWrapper
 import kr.co.inforexseoul.compose_map.map.MapState
@@ -35,13 +36,14 @@ private const val TAG = "NaverMap"
 /**
  * 네이버 지도
  */
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun OpenNaverMap(mapViewModel: MapViewModel = viewModel()) {
     MainTheme {
 
         var isMapLoaded by remember { mutableStateOf(false) }
         var reqLastLocation by remember { mutableStateOf(false) }
-        val cameraPosition by mapViewModel.cameraPositionState.collectAsStateWithLifecycle(initial = CameraPositionWrapper.UnInit)
+        val cameraPosition by mapViewModel.cameraPositionState.collectAsStateWithLifecycle()
         val cameraPositionState: CameraPositionState = rememberCameraPositionState {
                 position = mapViewModel.getNaverCameraPosition(mapViewModel.presentLocation)
         }

@@ -23,6 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import kr.co.inforexseoul.common_model.test_model.*
@@ -31,11 +33,11 @@ import kr.co.inforexseoul.common_ui.component.BottomSlideDialog
 import kr.co.inforexseoul.common_ui.component.CommonText
 import kr.co.inforexseoul.common_ui.component.LoadingBar
 import kr.co.inforexseoul.common_ui.theme.Mint20
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_database.entity.District
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun WeatherView(
@@ -45,7 +47,7 @@ fun WeatherView(
 ) {
     val open = remember { MutableTransitionState(false) }
     if (coordinate.value != null) {
-        val result by weatherViewModel.districtState.collectAsStateWithLifecycle(Result.Loading)
+        val result by weatherViewModel.districtState.collectAsStateWithLifecycle()
         when (result) {
             is Result.Error -> Log.e("qwe123", "district error")
             is Result.Loading -> {
@@ -67,6 +69,7 @@ fun WeatherView(
     }
 }
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun WeatherBottomSlideDialog(
     open: MutableTransitionState<Boolean>,
@@ -77,7 +80,7 @@ fun WeatherBottomSlideDialog(
 ) {
     Log.d("qwe123", "WeatherBottomSlideDialog()::: district name: ${district.districtName}")
     if (isGoogleMap) {
-        val result by weatherViewModel.openWeatherForecastState.collectAsStateWithLifecycle(Result.Loading)
+        val result by weatherViewModel.openWeatherForecastState.collectAsStateWithLifecycle()
         when (result) {
             is Result.Error -> Log.e("qwe123", "weather error")
             is Result.Loading -> LoadingBar()

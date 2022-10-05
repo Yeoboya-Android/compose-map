@@ -34,7 +34,13 @@ class SearchViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = Result.Loading,
-    )
+    ).map { state ->
+        if (state is Result.Success) {
+            state.data
+        } else {
+            listOf()
+        }
+    }
 
     private val _searchKeywordTextState = MutableStateFlow("")
 
@@ -48,7 +54,13 @@ class SearchViewModel @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false
-            ), pagingSourceFactory = { PagingSourceModule.providesDistrictPagingSource(keyword, getPageDistrictUseCase) }
+            ),
+            pagingSourceFactory = {
+                PagingSourceModule.providesDistrictPagingSource(
+                    keyword = keyword,
+                    getPageDistrictUseCase = getPageDistrictUseCase
+                )
+            }
         ).flow.cachedIn(viewModelScope.plus(ioDispatcher))
     }
 

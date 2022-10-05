@@ -1,4 +1,5 @@
 import Libs.Versions.ANDROID_GRADLE_VERSION
+import Libs.Versions.COMPOSE_LIFECYCLE_VERSION
 import Libs.Versions.COMPOSE_VERSION
 import Libs.Versions.COROUTINE_VERSION
 import Libs.Versions.GOOGLE_MAP_VERSION
@@ -21,6 +22,7 @@ object Libs {
         const val ROOM_VERSION = "2.4.3"
         const val HILT_VERSION = "2.44"
         const val GOOGLE_MAP_VERSION = "2.7.0"
+        const val COMPOSE_LIFECYCLE_VERSION = "2.6.0-alpha01"
     }
 
     object Hilt {
@@ -39,7 +41,8 @@ object Libs {
         const val COMPOSE_MATERIAL = "androidx.compose.material:material:$COMPOSE_VERSION"
         const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview:$COMPOSE_VERSION"
         const val COMPOSE_ACTIVITY = "androidx.activity:activity-compose:1.6.0"
-        const val COMPOSE_VIEW_MODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+        const val COMPOSE_LIFECYCLE_VIEW_MODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:$COMPOSE_LIFECYCLE_VERSION"
+        const val COMPOSE_LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime-compose:$COMPOSE_LIFECYCLE_VERSION"
         const val COMPOSE_MANIFEST = "androidx.compose.ui:ui-test-manifest:$COMPOSE_VERSION"
         const val COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling:$COMPOSE_VERSION"
         const val COMPOSE_JUNIT = "androidx.compose.ui:ui-test-junit4:$COMPOSE_VERSION"
