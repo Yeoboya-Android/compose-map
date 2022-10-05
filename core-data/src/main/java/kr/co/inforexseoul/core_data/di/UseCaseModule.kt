@@ -18,25 +18,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class UseCaseModule {
 
-    @Provides
     @Singleton
     fun providesGetOpenWeatherForecastUseCase(
         openWeatherRepository: OpenWeatherRepository
     ): GetOpenWeatherForecastUseCase = GetOpenWeatherForecastUseCase(openWeatherRepository)
 
-    @Provides
     @Singleton
     fun providesGetVillageForecastForecastUseCase(
         villageForecastRepository: VillageForecastRepository
     ): GetVillageForecastUseCase = GetVillageForecastUseCase(villageForecastRepository)
 
-    @Provides
     @Singleton
     fun providesGetBusStationDataUseCase(
         mapRepository: MapRepository
     ) : GetBusStationDataUseCase = GetBusStationDataUseCase(mapRepository)
 
-    @Provides
     @Singleton
     fun providesGetTranslateTextUseCase(
         papagoRepository: PapagoRepository
