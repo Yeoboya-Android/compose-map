@@ -29,12 +29,14 @@ import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapScreen
 import kr.co.inforexseoul.compose_map.translate.TranslateScreen
 import kr.co.inforexseoul.compose_map.subtitle.VideoScreen
+import kr.co.inforexseoul.feature_camera.camera.CameraScreen
 
 
 private val screens = listOf(
     DrawerScreens.Map,
     DrawerScreens.Translate,
-    DrawerScreens.Subtitles
+    DrawerScreens.Subtitles,
+    DrawerScreens.Camera
 )
 
 @Composable
@@ -104,6 +106,13 @@ fun MainScreen() {
                         }
                     }
                 }
+                composable(DrawerScreens.Camera.route) {
+                    viewModelStoreOwner?.let {
+                        CompositionLocalProvider(LocalViewModelStoreOwner provides  it) {
+                            CameraScreen()
+                        }
+                    }
+                }
             }
         }
     }
@@ -169,6 +178,7 @@ fun Drawer(
                     is DrawerScreens.Map -> stringResource(R.string.drawer_title_map)
                     is DrawerScreens.Translate -> stringResource(R.string.drawer_title_translate)
                     is DrawerScreens.Subtitles -> stringResource(R.string.drawer_title_vtt)
+                    is DrawerScreens.Camera -> stringResource(R.string.drawer_title_camera)
                 }
                 Text(
                     text = title,
@@ -189,4 +199,5 @@ sealed class DrawerScreens(val route: String) {
     object Map : DrawerScreens("map")
     object Translate : DrawerScreens("translate")
     object Subtitles : DrawerScreens("vtt")
+    object Camera : DrawerScreens("camera")
 }

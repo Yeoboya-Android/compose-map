@@ -1,4 +1,5 @@
 import Libs.Versions.ANDROID_GRADLE_VERSION
+import Libs.Versions.CAMERAX_VERSION
 import Libs.Versions.COMPOSE_LIFECYCLE_VERSION
 import Libs.Versions.COMPOSE_VERSION
 import Libs.Versions.COROUTINE_VERSION
@@ -23,6 +24,7 @@ object Libs {
         const val HILT_VERSION = "2.44"
         const val GOOGLE_MAP_VERSION = "2.7.0"
         const val COMPOSE_LIFECYCLE_VERSION = "2.6.0-alpha01"
+        const val CAMERAX_VERSION = "1.1.0-beta01"
     }
 
     object Hilt {
@@ -67,6 +69,13 @@ object Libs {
         /** 테스트 라이브러리 */
         const val JUNIT = "androidx.test.ext:junit:1.1.3"
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:3.4.0"
+
+        const val CAMERAX_CORE = "androidx.camera:camera-core:${CAMERAX_VERSION}"
+        const val CAMERAX_CAMERA2 = "androidx.camera:camera-camera2:${CAMERAX_VERSION}"
+        const val CAMERAX_LIFECYCLE = "androidx.camera:camera-lifecycle:${CAMERAX_VERSION}"
+        const val CAMERAX_VIDEO = "androidx.camera:camera-video:${CAMERAX_VERSION}"
+        const val CAMERAX_VIEW = "androidx.camera:camera-view:${CAMERAX_VERSION}"
+        const val CAMERAX_EXTENSIONS = "androidx.camera:camera-extensions:${CAMERAX_VERSION}"
     }
 
     internal object Coil {

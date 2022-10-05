@@ -56,6 +56,7 @@ dependencies {
     implementation(project(Modules.COMMON_UI))
     implementation(project(Modules.COMMON_UTIL))
     implementation(project(Modules.COMMON_MODEL))
+    implementation(project(Modules.FEATURE_CAMERA))
 }
 
 kapt {

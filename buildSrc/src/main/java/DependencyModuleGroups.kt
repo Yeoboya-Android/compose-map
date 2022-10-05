@@ -1,5 +1,3 @@
-
-
 /** app 모듈 의존성 주입 */
 internal val appDependencies: List<DependencyType>
     get() = listOf(
@@ -95,7 +93,7 @@ internal val commonUtilDependencies: List<DependencyType>
     )
 
 /** common-model 모듈 의존성 주입 */
-internal val commonModelDependencies : List<DependencyType>
+internal val commonModelDependencies: List<DependencyType>
     get() = listOf(
         Implementation(Libs.Google.GSON)
     )
@@ -163,4 +161,29 @@ internal val coreDataDependencies: List<DependencyType>
         /* 코루틴 */
         Implementation(Libs.JetBrains.COROUTINE_ANDROID),
         Implementation(Libs.JetBrains.COROUTINE_CORE),
+    )
+
+internal val featureCameraDependencies: List<DependencyType>
+    get() = listOf(
+        /* 힐트 */
+        Implementation(Libs.Hilt.HILT_ANDROID),
+        Kapt(Libs.Hilt.HILT_ANDROID_COMPILER),
+
+        /* 컴포즈 */
+        Implementation(Libs.Androidx.COMPOSE_ACTIVITY),
+
+        /* 페이징 */
+        Implementation(Libs.Androidx.COMPOSE_PAGING),
+
+        /* 권한 */
+        Implementation(Libs.Google.PERMISSION),
+        Implementation(Libs.Androidx.PERMISSION_APPCOMPAT),
+
+        /* 카메라 X */
+        Implementation(Libs.Androidx.CAMERAX_CORE),
+        Implementation(Libs.Androidx.CAMERAX_CAMERA2),
+        Implementation(Libs.Androidx.CAMERAX_LIFECYCLE),
+        Implementation(Libs.Androidx.CAMERAX_VIDEO),
+        Implementation(Libs.Androidx.CAMERAX_VIEW),
+        Implementation(Libs.Androidx.CAMERAX_EXTENSIONS),
     )

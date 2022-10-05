@@ -8,4 +8,6 @@ object Modules {
     const val COMMON_UI = ":common-ui"
     const val COMMON_UTIL = ":common-util"
     const val COMMON_MODEL = ":common-model"
+
+    const val FEATURE_CAMERA = ":feature-camera"
 }

@@ -10,6 +10,7 @@ fun DependencyHandler.implementationDependencies(module: String) {
         Modules.CORE_NETWORK -> coreNetworkDependencies
         Modules.CORE_DATABASE -> coreDataBaseDependencies
         Modules.CORE_DATA -> coreDataDependencies
+        Modules.FEATURE_CAMERA -> featureCameraDependencies
         else -> error("Not Found Module: $module")
     }.forEach { dependencyType ->
         val notation = when (dependencyType) {
