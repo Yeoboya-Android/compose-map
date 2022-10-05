@@ -1,0 +1,511 @@
+{
+  "result": "COMPLETED",
+  "message": "Succeeded",
+  "token": "7026e8e22d2a4dd49d1b72b9368bccb7",
+  "version": "ncp_v2_v2.0.19-2ec9dc0-20220512_v1.5.9_v0.0.0_",
+  "params": {
+    "service": "ncp",
+    "domain": "general",
+    "lang": "ko",
+    "completion": "sync",
+    "diarization": {
+      "enable": true,
+      "speakerCountMin": -1,
+      "speakerCountMax": -1
+    },
+    "boostings": [],
+    "forbiddens": "",
+    "wordAlignment": true,
+    "fullText": true,
+    "resultToObs": false,
+    "priority": 0,
+    "userdata": {
+      "_ncp_DomainCode": "eunchang",
+      "_ncp_DomainId": 3858,
+      "_ncp_TaskId": 5576401,
+      "_ncp_TraceId": "b7899f22f8f840d5a5dd24e403f96a46"
+    }
+  },
+  "progress": 100,
+  "keywords": {},
+  "segments": [
+    {
+      "start": 1430,
+      "end": 4430,
+      "text": "한 번 무조건 보여야지 이",
+      "confidence": 0.7090249,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [
+        [
+          1431,
+          1550,
+          "한"
+        ],
+        [
+          1800,
+          1950,
+          "번"
+        ],
+        [
+          2140,
+          2530,
+          "무조건"
+        ],
+        [
+          2540,
+          3010,
+          "보여야지"
+        ],
+        [
+          4200,
+          4350,
+          "이"
+        ]
+      ],
+      "textEdited": "한 번 무조건 보여야지 이"
+    },
+    {
+      "start": 4430,
+      "end": 8890,
+      "text": "그림이다. 그림 대복이다. 으로",
+      "confidence": 0.48391747,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [
+        [
+          4431,
+          5090,
+          "그림이다."
+        ],
+        [
+          5100,
+          5370,
+          "그림"
+        ],
+        [
+          6200,
+          6850,
+          "대복이다."
+        ],
+        [
+          7500,
+          7770,
+          "으로"
+        ]
+      ],
+      "textEdited": "그림이다. 그림 대복이다. 으로"
+    },
+    {
+      "start": 11830,
+      "end": 14830,
+      "text": "야 왜 물이 잠겼어 아 지가 저거 먹고 싶어",
+      "confidence": 0.8752792,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [
+        [
+          11831,
+          11950,
+          "야"
+        ],
+        [
+          12280,
+          12430,
+          "왜"
+        ],
+        [
+          12500,
+          12710,
+          "물이"
+        ],
+        [
+          12711,
+          13090,
+          "잠겼어"
+        ],
+        [
+          13600,
+          13750,
+          "아"
+        ],
+        [
+          13900,
+          14130,
+          "지가"
+        ],
+        [
+          14140,
+          14330,
+          "저거"
+        ],
+        [
+          14420,
+          14610,
+          "먹고"
+        ],
+        [
+          14660,
+          14830,
+          "싶어"
+        ]
+      ],
+      "textEdited": "야 왜 물이 잠겼어 아 지가 저거 먹고 싶어"
+    },
+    {
+      "start": 14830,
+      "end": 18640,
+      "text": "진짜 맛있어 우리 대박이다. 깜짝 애들 잘해라 파이팅",
+      "confidence": 0.61786866,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [
+        [
+          14831,
+          15690,
+          "진짜"
+        ],
+        [
+          15691,
+          15910,
+          "맛있어"
+        ],
+        [
+          15911,
+          16110,
+          "우리"
+        ],
+        [
+          16620,
+          16868,
+          "대박이다."
+        ],
+        [
+          16869,
+          17490,
+          "깜짝"
+        ],
+        [
+          17520,
+          17710,
+          "애들"
+        ],
+        [
+          17711,
+          18030,
+          "잘해라"
+        ],
+        [
+          18100,
+          18410,
+          "파이팅"
+        ]
+      ],
+      "textEdited": "진짜 맛있어 우리 대박이다. 깜짝 애들 잘해라 파이팅"
+    },
+    {
+      "start": 18680,
+      "end": 19240,
+      "text": "",
+      "confidence": 0.0,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [],
+      "textEdited": ""
+    },
+    {
+      "start": 19580,
+      "end": 22240,
+      "text": "아 이거는 맞추라고 준 거다 자",
+      "confidence": 0.8853849,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [
+        [
+          19581,
+          19700,
+          "아"
+        ],
+        [
+          20030,
+          20380,
+          "이거는"
+        ],
+        [
+          20570,
+          21020,
+          "맞추라고"
+        ],
+        [
+          21021,
+          21160,
+          "준"
+        ],
+        [
+          21170,
+          21420,
+          "거다"
+        ],
+        [
+          21830,
+          21980,
+          "자"
+        ]
+      ],
+      "textEdited": "아 이거는 맞추라고 준 거다 자"
+    },
+    {
+      "start": 22280,
+      "end": 23290,
+      "text": "전원",
+      "confidence": 0.8606455,
+      "diarization": {
+        "label": "3"
+      },
+      "speaker": {
+        "label": "3",
+        "name": "C",
+        "edited": false
+      },
+      "words": [
+        [
+          22281,
+          22940,
+          "전원"
+        ]
+      ],
+      "textEdited": "전원"
+    },
+    {
+      "start": 24130,
+      "end": 28090,
+      "text": "정답이 아닙니다.",
+      "confidence": 0.99431616,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [
+        [
+          24131,
+          24930,
+          "정답이"
+        ],
+        [
+          26440,
+          27130,
+          "아닙니다."
+        ]
+      ],
+      "textEdited": "정답이 아닙니다."
+    },
+    {
+      "start": 28380,
+      "end": 29380,
+      "text": "나 누구야",
+      "confidence": 0.889244,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [
+        [
+          28381,
+          28500,
+          "나"
+        ],
+        [
+          28770,
+          29140,
+          "누구야"
+        ]
+      ],
+      "textEdited": "나 누구야"
+    },
+    {
+      "start": 29380,
+      "end": 30490,
+      "text": "",
+      "confidence": 0.0,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [],
+      "textEdited": ""
+    },
+    {
+      "start": 32630,
+      "end": 33640,
+      "text": "",
+      "confidence": 0.0,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [],
+      "textEdited": ""
+    },
+    {
+      "start": 35380,
+      "end": 36880,
+      "text": "",
+      "confidence": 0.0,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [],
+      "textEdited": ""
+    },
+    {
+      "start": 36880,
+      "end": 39890,
+      "text": "이걸 모른다고 너무 한다",
+      "confidence": 0.5079812,
+      "diarization": {
+        "label": "1"
+      },
+      "speaker": {
+        "label": "1",
+        "name": "A",
+        "edited": false
+      },
+      "words": [
+        [
+          36881,
+          37100,
+          "이걸"
+        ],
+        [
+          37150,
+          37600,
+          "모른다고"
+        ],
+        [
+          37850,
+          38065,
+          "너무"
+        ],
+        [
+          38066,
+          38280,
+          "한다"
+        ]
+      ],
+      "textEdited": "이걸 모른다고 너무 한다"
+    },
+    {
+      "start": 40380,
+      "end": 42190,
+      "text": "이런 게 그게 아니야",
+      "confidence": 0.5538586,
+      "diarization": {
+        "label": "2"
+      },
+      "speaker": {
+        "label": "2",
+        "name": "B",
+        "edited": false
+      },
+      "words": [
+        [
+          40381,
+          40680,
+          "이런"
+        ],
+        [
+          40710,
+          40860,
+          "게"
+        ],
+        [
+          40970,
+          41200,
+          "그게"
+        ],
+        [
+          41201,
+          41720,
+          "아니야"
+        ]
+      ],
+      "textEdited": "이런 게 그게 아니야"
+    }
+  ],
+  "text": "한 번 무조건 보여야지 이 그림이다. 그림 대복이다. 으로 야 왜 물이 잠겼어 아 지가 저거 먹고 싶어 진짜 맛있어 우리 대박이다. 깜짝 애들 잘해라 파이팅 아 이거는 맞추라고 준 거다 자 전원 정답이 아닙니다. 나 누구야 이걸 모른다고 너무 한다 이런 게 그게 아니야",
+  "confidence": 0.70927685,
+  "speakers": [
+    {
+      "label": "1",
+      "name": "A",
+      "edited": false
+    },
+    {
+      "label": "2",
+      "name": "B",
+      "edited": false
+    },
+    {
+      "label": "3",
+      "name": "C",
+      "edited": false
+    }
+  ]
+}

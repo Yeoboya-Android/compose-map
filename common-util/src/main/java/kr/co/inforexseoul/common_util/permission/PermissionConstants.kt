@@ -10,3 +10,8 @@ val locationPermissions = listOf(
 val recordPermissions = listOf(
     Manifest.permission.RECORD_AUDIO
 )
+
+val storagePermissions = listOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+)

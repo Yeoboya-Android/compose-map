@@ -18,7 +18,7 @@ class TranslateViewModel @Inject constructor(
     private val getTranslateTextUseCase: GetTranslateTextUseCase,
 ) : ViewModel() {
 
-    private val _translateState = MutableStateFlow<TransLateState>(TransLateState.UnInit)
+    private val _translateState = MutableStateFlow<TranslateState>(TranslateState.UnInit)
     var translateState = _translateState
 
     private val googleLanguageMap = HashMap<String, Int>().apply {
@@ -47,11 +47,11 @@ class TranslateViewModel @Inject constructor(
                 target = targetLanguage,
                 text = text
             )
-            .onStart { _translateState.value = TransLateState.Loading }
-            .map { _translateState.value = TransLateState.Success(it) }
+            .onStart { _translateState.value = TranslateState.Loading }
+            .map { _translateState.value = TranslateState.Success(it) }
             .catch {
                 Log.e("qwe123", "error: ${it.stackTraceToString()}")
-                _translateState.value = TransLateState.Error("error")
+                _translateState.value = TranslateState.Error("error")
             }
             .launchIn(viewModelScope)
         }
@@ -61,38 +61,38 @@ class TranslateViewModel @Inject constructor(
         text: String,
         sourceLanguage: String,
         targetLanguage: String
-    ): Flow<TransLateState> = callbackFlow {
+    ): Flow<TranslateState> = callbackFlow {
         val options = FirebaseTranslatorOptions.Builder()
             .setSourceLanguage(googleLanguageMap[sourceLanguage]!!)
             .setTargetLanguage(googleLanguageMap[targetLanguage]!!)
             .build()
         val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
 
-        trySend(TransLateState.Loading)
+        trySend(TranslateState.Loading)
         translator.downloadModelIfNeeded()
             .addOnSuccessListener {
                 translator.translate(text)
                     .addOnSuccessListener { translatedText ->
-                        trySend(TransLateState.Success(translatedText))
+                        trySend(TranslateState.Success(translatedText))
                     }
                     .addOnFailureListener {
-                        trySend(TransLateState.Error("번역실패"))
+                        trySend(TranslateState.Error("번역실패"))
                     }
             }
             .addOnFailureListener {
-                trySend(TransLateState.Error("언어팩 다운로드 실패"))
+                trySend(TranslateState.Error("언어팩 다운로드 실패"))
             }
             .addOnCanceledListener {
-                trySend(TransLateState.Error("언어팩 유저 캔슬"))
+                trySend(TranslateState.Error("언어팩 유저 캔슬"))
             }
 
         awaitClose { translator.close() }
     }
 }
 
-sealed interface TransLateState {
-    object UnInit : TransLateState
-    object Loading : TransLateState
-    data class Error(val errorMsg: String) : TransLateState
-    data class Success(val data: String) : TransLateState
+sealed interface TranslateState {
+    object UnInit : TranslateState
+    object Loading : TranslateState
+    data class Error(val errorMsg: String) : TranslateState
+    data class Success(val data: String) : TranslateState
 }
