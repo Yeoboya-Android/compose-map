@@ -1,6 +1,5 @@
 package kr.co.inforexseoul.compose_map.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -31,15 +30,6 @@ class SearchViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    init {
-        Log.d("qweqwe", "SearchViewModel:init")
-    }
-
-    override fun onCleared() {
-        Log.d("qweqwe", "SearchViewModel:onCleared")
-        super.onCleared()
-    }
-
     val recentSearchDistrictState = getRecentSearchDistrictsUseCase.invoke().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -64,7 +54,13 @@ class SearchViewModel @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false
-            ), pagingSourceFactory = { PagingSourceModule.providesDistrictPagingSource(keyword, getPageDistrictUseCase) }
+            ),
+            pagingSourceFactory = {
+                PagingSourceModule.providesDistrictPagingSource(
+                    keyword = keyword,
+                    getPageDistrictUseCase = getPageDistrictUseCase
+                )
+            }
         ).flow.cachedIn(viewModelScope.plus(ioDispatcher))
     }
 

@@ -131,7 +131,10 @@ fun SpeechRecognizer(
                 composition = lottieComposition,
                 iterations = LottieConstants.IterateForever
             )
-            LottieAnimation(composition = lottieComposition, progress = { progress })
+            LottieAnimation(
+                composition = lottieComposition,
+                progress = { progress }
+            )
         }
     }
 }

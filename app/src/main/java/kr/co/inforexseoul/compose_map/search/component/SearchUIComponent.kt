@@ -201,7 +201,7 @@ fun SearchResultList(
 ) {
     val keywordDistrictList = keywordDistrictListState.collectAsLazyPagingItems()
 
-    if (text.value.isNotEmpty()) {
+    if (text.value.isNotBlank() && text.value.isNotEmpty()) {
         onUpdateKeyword.invoke(text.value)
         LazyColumn(verticalArrangement = Arrangement.Center) {
             group(
