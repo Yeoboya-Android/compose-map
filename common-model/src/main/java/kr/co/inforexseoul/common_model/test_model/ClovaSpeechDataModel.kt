@@ -7,10 +7,10 @@ data class ClovaSpeechDataModel(
     @SerializedName("message") val message: String = "",
     @SerializedName("token") val token: String = "",
     @SerializedName("version") val version: String = "",
-    @SerializedName("segments") val segments: List<ClovaSpeechSegments> = listOf(),
+    @SerializedName("segments") val segments: List<ClovaSpeechSegment> = listOf(),
 )
 
-data class ClovaSpeechSegments(
+data class ClovaSpeechSegment(
     @SerializedName("start") val start: Long = 0,
     @SerializedName("end") val end: Long = 0,
     @SerializedName("text") val text: String = "",

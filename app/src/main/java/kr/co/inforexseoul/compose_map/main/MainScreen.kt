@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapScreen
+import kr.co.inforexseoul.compose_map.subtitle.SampleVideoScreen
 import kr.co.inforexseoul.compose_map.translate.TranslateScreen
 import kr.co.inforexseoul.compose_map.subtitle.VideoScreen
 
@@ -34,7 +35,8 @@ import kr.co.inforexseoul.compose_map.subtitle.VideoScreen
 private val screens = listOf(
     DrawerScreens.Map,
     DrawerScreens.Translate,
-    DrawerScreens.Subtitles
+    DrawerScreens.Subtitles,
+    DrawerScreens.SampleVideo
 )
 
 @Composable
@@ -104,6 +106,13 @@ fun MainScreen() {
                         }
                     }
                 }
+                composable(DrawerScreens.SampleVideo.route) {
+                    viewModelStoreOwner?.let {
+                        CompositionLocalProvider(LocalViewModelStoreOwner provides it) {
+                            SampleVideoScreen(appbarTitle = appbarTitle)
+                        }
+                    }
+                }
             }
         }
     }
@@ -168,7 +177,8 @@ fun Drawer(
                 val title = when (screen) {
                     is DrawerScreens.Map -> stringResource(R.string.drawer_title_map)
                     is DrawerScreens.Translate -> stringResource(R.string.drawer_title_translate)
-                    is DrawerScreens.Subtitles -> stringResource(R.string.drawer_title_vtt)
+                    is DrawerScreens.Subtitles -> stringResource(R.string.drawer_title_subtitle)
+                    is DrawerScreens.SampleVideo -> stringResource(R.string.drawer_title_sample_video)
                 }
                 Text(
                     text = title,
@@ -188,5 +198,6 @@ fun Drawer(
 sealed class DrawerScreens(val route: String) {
     object Map : DrawerScreens("map")
     object Translate : DrawerScreens("translate")
-    object Subtitles : DrawerScreens("vtt")
+    object Subtitles : DrawerScreens("subtitles")
+    object SampleVideo : DrawerScreens("sampleVideo")
 }

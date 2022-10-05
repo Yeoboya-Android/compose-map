@@ -66,11 +66,11 @@ fun TranslateScreen(
 
     val result by translateViewModel.translateState.collectAsStateWithLifecycle()
     when (result) {
-        is TransLateState.UnInit -> Unit
-        is TransLateState.Error -> Log.e("qwe123", "translate error")
-        is TransLateState.Loading -> LoadingBar()
-        is TransLateState.Success -> {
-            targetText.value = (result as TransLateState.Success).data
+        is TranslateState.UnInit -> Unit
+        is TranslateState.Error -> Log.e("qwe123", "translate error")
+        is TranslateState.Loading -> LoadingBar()
+        is TranslateState.Success -> {
+            targetText.value = (result as TranslateState.Success).data
         }
     }
 
