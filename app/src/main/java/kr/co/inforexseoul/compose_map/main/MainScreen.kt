@@ -28,11 +28,13 @@ import kotlinx.coroutines.launch
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.compose_map.map.MapScreen
 import kr.co.inforexseoul.compose_map.translate.TranslateScreen
+import kr.co.inforexseoul.compose_map.subtitle.VideoScreen
 
 
 private val screens = listOf(
     DrawerScreens.Map,
-    DrawerScreens.Translate
+    DrawerScreens.Translate,
+    DrawerScreens.Subtitles
 )
 
 @Composable
@@ -92,6 +94,13 @@ fun MainScreen() {
                     viewModelStoreOwner?.let {
                         CompositionLocalProvider(LocalViewModelStoreOwner provides it) {
                             TranslateScreen(appbarTitle = appbarTitle)
+                        }
+                    }
+                }
+                composable(DrawerScreens.Subtitles.route) {
+                    viewModelStoreOwner?.let {
+                        CompositionLocalProvider(LocalViewModelStoreOwner provides it) {
+                            VideoScreen(appbarTitle = appbarTitle)
                         }
                     }
                 }
@@ -159,6 +168,7 @@ fun Drawer(
                 val title = when (screen) {
                     is DrawerScreens.Map -> stringResource(R.string.drawer_title_map)
                     is DrawerScreens.Translate -> stringResource(R.string.drawer_title_translate)
+                    is DrawerScreens.Subtitles -> stringResource(R.string.drawer_title_vtt)
                 }
                 Text(
                     text = title,
@@ -178,4 +188,5 @@ fun Drawer(
 sealed class DrawerScreens(val route: String) {
     object Map : DrawerScreens("map")
     object Translate : DrawerScreens("translate")
+    object Subtitles : DrawerScreens("vtt")
 }

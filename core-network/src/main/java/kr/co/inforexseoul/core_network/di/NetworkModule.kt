@@ -6,11 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.co.inforexseoul.core_network.service.MapApiService
-import kr.co.inforexseoul.core_network.service.OpenWeatherApiService
-import kr.co.inforexseoul.core_network.service.PapagoApiService
-import kr.co.inforexseoul.core_network.service.VillageForecastApiService
+import kr.co.inforexseoul.core_network.service.*
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -21,6 +19,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    // 동영상 자막
+    private const val baseUrlClovaSpeech = "https://clovaspeech-gw.ncloud.com/external/v1/3858/874f51520a969443af4820df6b9fac176ef3704f21baf03c519822ea78ecf794/"
 
     // 번역
     private const val baseUrlPapago = "https://openapi.naver.com/v1/papago/"
@@ -77,5 +78,10 @@ object NetworkModule {
     @Provides
     fun providesPapagoApiService(retrofit: Retrofit.Builder): PapagoApiService =
         retrofit.baseUrl(baseUrlPapago).build().create(PapagoApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesClovaApiService(retrofit: Retrofit.Builder): ClovaSpeechApiService =
+        retrofit.baseUrl(baseUrlClovaSpeech).build().create(ClovaSpeechApiService::class.java)
 
 }

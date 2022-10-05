@@ -98,6 +98,7 @@ object Libs {
         const val GOOGLE_GMS_SERVICE = "com.google.gms:google-services:4.3.13"
         const val GOOGLE_LANGUAGE = "com.google.firebase:firebase-ml-natural-language:22.0.0"
         const val GOOGLE_LANGUAGE_TRANSLATE = "com.google.firebase:firebase-ml-natural-language-translate-model:20.0.8"
+        const val GOOGLE_EXOPLAYER = "com.google.android.exoplayer:exoplayer:2.16.1"
     }
 
     object Naver {

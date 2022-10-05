@@ -26,6 +26,7 @@
 
     <string name="drawer_title_map">지도</string>
     <string name="drawer_title_translate">번역기</string>
+    <string name="drawer_title_vtt">동영상 자막</string>
 
     <string name="translate_language_ko">한국어</string>
     <string name="translate_language_en">영어</string>

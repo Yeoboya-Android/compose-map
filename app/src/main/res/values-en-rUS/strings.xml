@@ -24,6 +24,7 @@
 
     <string name="drawer_title_map">Map</string>
     <string name="drawer_title_translate">Translator</string>
+    <string name="drawer_title_vtt">Video subtitles</string>
 
     <string name="translate_language_ko">Korean</string>
     <string name="translate_language_en">English</string>

@@ -49,6 +49,10 @@
             android:name="kr.co.inforexseoul.compose_map.translate.NAVER_CLIENT_SECRET"
             android:value="${NAVER_CLIENT_SECRET}" />
 
+        <meta-data
+            android:name="kr.co.inforexseoul.compose_map.subtitle.CLOVA_SPEECH_SECRET"
+            android:value="${CLOVA_SPEECH_SECRET}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

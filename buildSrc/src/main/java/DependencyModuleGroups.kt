@@ -49,6 +49,9 @@ internal val appDependencies: List<DependencyType>
         Implementation(Libs.Google.GOOGLE_LANGUAGE),
         Implementation(Libs.Google.GOOGLE_LANGUAGE_TRANSLATE),
 
+        /* 번역 */
+        Implementation(Libs.Google.GOOGLE_EXOPLAYER),
+
         AndroidTestImplementation(Libs.Androidx.JUNIT),
         AndroidTestImplementation(Libs.Androidx.ESPRESSO_CORE),
 

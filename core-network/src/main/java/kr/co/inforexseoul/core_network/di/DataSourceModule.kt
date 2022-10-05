@@ -18,6 +18,11 @@ interface DataSourceModule {
         papagoRemoteDataSourceImpl: PapagoRemoteDataSourceImpl
     ): PapagoRemoteDataSource
 
+    @Binds
+    fun bindsClovaSpeechRemoteDataSource(
+        clovaSpeechRemoteDataSourceImpl: ClovaSpeechRemoteDataSourceImpl
+    ): ClovaSpeechRemoteDataSource
+
     /**
      * 날씨 관련 API
      */
