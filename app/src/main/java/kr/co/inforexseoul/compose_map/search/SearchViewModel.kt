@@ -12,6 +12,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.plus
 import kr.co.inforexseoul.common_util.di.IoDispatcher
+import kr.co.inforexseoul.common_util.extension.isNotBlankAndNotEmpty
 import kr.co.inforexseoul.core_data.di.PagingSourceModule
 import kr.co.inforexseoul.core_data.state.Result
 import kr.co.inforexseoul.core_data.usecase.GetPageDistrictUseCase
@@ -49,7 +50,7 @@ class SearchViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = ""
-    ).debounce(1_000).flatMapLatest { keyword ->
+    ).filter { it.isNotBlankAndNotEmpty() }.debounce(1_000).flatMapLatest { keyword ->
         Pager(
             config = PagingConfig(
                 pageSize = 10,
