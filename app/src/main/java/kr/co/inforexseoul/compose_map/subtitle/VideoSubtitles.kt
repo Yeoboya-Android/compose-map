@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
@@ -23,17 +25,17 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.common.collect.ImmutableList
 import kr.co.inforexseoul.common_model.test_model.ClovaSpeechDataModel
-import kr.co.inforexseoul.common_util.ui.collectAsStateWithLifecycle
 import kr.co.inforexseoul.compose_map.R
 import kr.co.inforexseoul.core_data.state.Result
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun VideoScreen(
     videoViewModel: VideoSubtitlesViewModel = viewModel(),
     appbarTitle: MutableState<@Composable () -> Unit>
 ) {
 
-    /*val result by videoViewModel.clovaSubtitlesState.collectAsStateWithLifecycle(initial = Result.Loading)
+    /*val result by videoViewModel.clovaSubtitlesState.collectAsStateWithLifecycle()
     when (result) {
         is Result.Error -> {
             Log.e("qwe123", "subtitlesState error")
