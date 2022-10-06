@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -32,11 +34,12 @@ import com.google.common.collect.ImmutableList
 import com.google.gson.Gson
 import kr.co.inforexseoul.common_model.test_model.ClovaSpeechDataModel
 import kr.co.inforexseoul.common_model.test_model.ClovaSpeechSegment
-import kr.co.inforexseoul.common_ui.component.FilledButton
+import kr.co.inforexseoul.common_ui.UIConstants
+import kr.co.inforexseoul.common_ui.component.LoadingBar
+import kr.co.inforexseoul.common_ui.component.TextButton
 import kr.co.inforexseoul.common_util.permission.CheckPermission
 import kr.co.inforexseoul.common_util.permission.storagePermissions
 import kr.co.inforexseoul.compose_map.R
-import kr.co.inforexseoul.core_data.state.Result
 import org.json.JSONException
 import java.io.*
 
@@ -47,79 +50,73 @@ fun VideoScreen(
     videoViewModel: VideoSubtitlesViewModel = viewModel(),
     appbarTitle: MutableState<@Composable () -> Unit>
 ) {
-    appbarTitle.value = {
-        Text(
-            text = stringResource(id = R.string.drawer_title_subtitle),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(x = (-32).dp)
-        )
-    }
-
-
-    var videoUri = Uri.parse("")
-
     CheckPermission(permissions = storagePermissions) {
         val context = LocalContext.current
-
-        val result by videoViewModel.videoUploadState.collectAsStateWithLifecycle()
-        val clovaData: MutableState<ClovaSpeechDataModel?> = remember { mutableStateOf(null)}
-        when (result) {
-            is Result.Error -> {
-                Log.e("qwe123", "subtitlesState error")
-            }
-            is Result.Loading -> {
-                clovaData.value = null
-                Log.i("qwe123", "subtitlesState loading")
-            }
-            is Result.Success -> {
-                Log.i("qwe123", "subtitlesState success")
-                val data = (result as Result.Success<ClovaSpeechDataModel>).data
-                clovaData.value = data
-            }
-        }
-
-        if (clovaData.value != null) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                AndroidView(
-                    modifier = Modifier.align(Alignment.Center),
-                    factory = { context ->
-                        PlayerView(context).apply {
-
-                            val srtUri = getSubtitleUri(context, clovaData.value!!)
-                            player = getExoplayer(
-                                context = context,
-                                videoUri = videoUri,
-                                subtitleUri = srtUri
-                            )
-                        }
-                    }
-                )
-            }
-        }
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            val videoLauncher =
-                rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        result.data?.data?.let { uri ->
+        var videoUri by remember { mutableStateOf(Uri.parse("")) }
+        var clovaData: ClovaSpeechDataModel? by remember { mutableStateOf(null) }
+        val videoLauncher =
+            rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.data?.let { uri ->
+                        getFile(context, uri)?.let {
                             videoUri = uri
-                            getFile(context, uri)?.let {
-                                videoViewModel.uploadVideo(it)
-                            }
+                            videoViewModel.uploadVideo(it)
                         }
                     }
                 }
-
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
-                type = "video/*"
-                action = Intent.ACTION_PICK
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
             }
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+            type = "video/*"
+            action = Intent.ACTION_PICK
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+        }
 
-            FilledButton(text = "gogo", modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp)) {
-                videoLauncher.launch(intent)
+        appbarTitle.value = {
+            TextButton(
+                text = "동영상 선택 🎞",
+                fontSize = UIConstants.FONT_SIZE_LARGE.sp,
+                contentColor = MaterialTheme.colors.onPrimary,
+                modifier = Modifier
+                    .defaultMinSize(1.dp)
+                    .fillMaxWidth()
+                    .offset(x = (-32).dp),
+                onClick = {
+                    videoLauncher.launch(intent)
+                }
+            )
+        }
+
+        val result by videoViewModel.videoUploadState.collectAsStateWithLifecycle()
+        when (result) {
+            is SubtitleState.UnInit -> {
+                Log.i("qwe123", "subtitlesState UnInit")
+            }
+            is SubtitleState.Loading -> {
+                clovaData = null
+                LoadingBar()
+                Log.i("qwe123", "subtitlesState loading")
+            }
+            is SubtitleState.Success -> {
+                Log.i("qwe123", "subtitlesState success")
+                val data = (result as SubtitleState.Success).data
+                clovaData = data
+            }
+        }
+
+        if (clovaData != null) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                val srtUri = getSubtitleUri(context, clovaData!!)
+                val exoPlayer = remember {
+                    getExoplayer(
+                        context = context,
+                        videoUri = videoUri,
+                        subtitleUri = srtUri
+                    )
+                }
+                AndroidView(
+                    modifier = Modifier.align(Alignment.Center),
+                    factory = { PlayerView(it).apply { player = exoPlayer } }
+                )
             }
         }
     }

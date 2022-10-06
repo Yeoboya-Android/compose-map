@@ -17,5 +17,5 @@ class GetClovaSubtitlesWithUploadUseCase @Inject constructor(
         secretKey,
         file,
         language
-    ).resultFlow
+    )
 }

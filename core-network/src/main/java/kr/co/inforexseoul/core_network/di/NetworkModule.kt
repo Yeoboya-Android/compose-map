@@ -21,7 +21,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     // 동영상 자막
-    private const val baseUrlClovaSpeech = "https://clovaspeech-gw.ncloud.com/external/v1/3858/874f51520a969443af4820df6b9fac176ef3704f21baf03c519822ea78ecf794/"
+    private const val baseUrlClovaSpeech = "https://clovaspeech-gw.ncloud.com/external/v1/3870/3d04298119dd8cd3dba0af251d646fdccd3625ac18b1b44a9d91d82da5746a18/"
 
     // 번역
     private const val baseUrlPapago = "https://openapi.naver.com/v1/papago/"
