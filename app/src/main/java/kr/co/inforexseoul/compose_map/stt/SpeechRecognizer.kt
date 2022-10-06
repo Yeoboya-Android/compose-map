@@ -6,6 +6,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -116,14 +116,15 @@ fun SpeechRecognizer(
         else -> Unit
     }
 
-    Surface(color = Color.White, modifier = Modifier.fillMaxSize(2f)) {
+    Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize(2f)) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "듣고 있습니다.",
-                fontSize = 30.sp
+                fontSize = 30.sp,
+                color = MaterialTheme.colors.primaryVariant
             )
 
             val lottieComposition by rememberLottieComposition(LottieCompositionSpec.Asset("recording.json"))

@@ -4,12 +4,12 @@ import SearchLayout
 import SearchTextField
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -33,7 +33,7 @@ fun SearchDialog(
             onDismissRequest = { searchDialogOpen.targetState = false },
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
+            Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()) {
                 SearchRoute { searchDistrict ->
                     searchDialogOpen.targetState = false
                     resultDistrict.invoke(searchDistrict)

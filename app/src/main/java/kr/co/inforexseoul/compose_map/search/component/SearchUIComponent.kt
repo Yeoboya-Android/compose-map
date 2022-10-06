@@ -46,7 +46,7 @@ fun SearchLayout(
     val text = remember { mutableStateOf("") }
     val speechRecognizerDialogOpen = remember { MutableTransitionState(false) }
 
-    Surface(color = Color.White) {
+    Surface(color = MaterialTheme.colors.background) {
         Column {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -159,33 +159,36 @@ fun RecentSearchList(
     onClick: (District) -> Unit,
     onDelete: (District) -> Unit
 ) {
-    LazyColumn {
-        group(
-            titleDecorator = makeSearchGroupTitleDecorator("최근 검색"),
-            items = recentSearchList
-        ) { district ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(30.dp, Dp.Infinity),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = district.districtName,
+    val groupTitleColor = MaterialTheme.colors.primaryVariant
+    if (recentSearchList.isNotEmpty()) {
+        LazyColumn {
+            group(
+                titleDecorator = makeSearchGroupTitleDecorator("최근 검색", groupTitleColor),
+                items = recentSearchList
+            ) { district ->
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 15.dp)
-                        .clickable { onClick.invoke(district) },
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 3,
-                )
-                IconButton(onClick = { onDelete.invoke(district) }) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_close_b),
-                        contentDescription = "delete search",
-                        modifier = Modifier.size(40.dp)
+                        .fillMaxWidth()
+                        .heightIn(30.dp, Dp.Infinity),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = district.districtName,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 15.dp)
+                            .clickable { onClick.invoke(district) },
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 3,
                     )
+                    IconButton(onClick = { onDelete.invoke(district) }) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_close_b),
+                            contentDescription = "delete search",
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
                 }
             }
         }
@@ -200,12 +203,13 @@ fun SearchResultList(
     onClick: (District) -> Unit
 ) {
     val keywordDistrictList = keywordDistrictListState.collectAsLazyPagingItems()
+    val groupTitleColor = MaterialTheme.colors.primaryVariant
 
     if (text.value.isNotBlank() && text.value.isNotEmpty()) {
         onUpdateKeyword.invoke(text.value)
         LazyColumn(verticalArrangement = Arrangement.Center) {
             group(
-                titleDecorator = makeSearchGroupTitleDecorator("검색결과"),
+                titleDecorator = makeSearchGroupTitleDecorator("검색결과", groupTitleColor),
                 items = keywordDistrictList
             ) { district ->
                 if (district != null) {
@@ -225,8 +229,10 @@ fun SearchResultList(
     }
 }
 
-private fun makeSearchGroupTitleDecorator(title: String): TitleDecorator = TitleDecorator(
-    text = title,
-    fontSize = 20.sp,
-    fontStyle = FontStyle.Italic,
-)
+private fun makeSearchGroupTitleDecorator(title: String, color: Color): TitleDecorator =
+    TitleDecorator(
+        text = title,
+        fontSize = 20.sp,
+        fontStyle = FontStyle.Italic,
+        color = color,
+    )
