@@ -3,9 +3,9 @@ package kr.co.inforexseoul.compose_map.translate
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -21,12 +21,12 @@ class TranslateViewModel @Inject constructor(
     private val _translateState = MutableStateFlow<TranslateState>(TranslateState.UnInit)
     var translateState = _translateState
 
-    private val googleLanguageMap = HashMap<String, Int>().apply {
-        put("ko", FirebaseTranslateLanguage.KO) // 한국어
-        put("en", FirebaseTranslateLanguage.EN) // 영어
-        put("zh-CN", FirebaseTranslateLanguage.ZH) // 중국어
-        put("ja", FirebaseTranslateLanguage.JA) // 일본어
-        put("fr", FirebaseTranslateLanguage.FR) // 프랑스어
+    private val googleLanguageMap = HashMap<String, String>().apply {
+        put("ko", TranslateLanguage.KOREAN) // 한국어
+        put("en", TranslateLanguage.ENGLISH) // 영어
+        put("zh-CN", TranslateLanguage.CHINESE) // 중국어
+        put("ja", TranslateLanguage.JAPANESE) // 일본어
+        put("fr", TranslateLanguage.FRENCH) // 프랑스어
     }
 
     fun translateText(
@@ -62,11 +62,11 @@ class TranslateViewModel @Inject constructor(
         sourceLanguage: String,
         targetLanguage: String
     ): Flow<TranslateState> = callbackFlow {
-        val options = FirebaseTranslatorOptions.Builder()
+        val options = TranslatorOptions.Builder()
             .setSourceLanguage(googleLanguageMap[sourceLanguage]!!)
             .setTargetLanguage(googleLanguageMap[targetLanguage]!!)
             .build()
-        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
+        val translator = Translation.getClient(options)
 
         trySend(TranslateState.Loading)
         translator.downloadModelIfNeeded()
