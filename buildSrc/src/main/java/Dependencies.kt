@@ -99,7 +99,7 @@ object Libs {
         const val PERMISSION = "com.google.accompanist:accompanist-permissions:0.25.1"
         const val SECRET_GRADLE_PLUGIN = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
         const val GOOGLE_GMS_SERVICE = "com.google.gms:google-services:4.3.13"
-        const val GOOGLE_TRANSLATE = "com.google.mlkit:translate:17.0.1"
+        const val GOOGLE_ML_KIT_TRANSLATE = "com.google.mlkit:translate:17.0.1"
         const val GOOGLE_EXOPLAYER = "com.google.android.exoplayer:exoplayer:2.16.1"
     }
 

@@ -50,6 +50,10 @@
             android:value="${NAVER_CLIENT_ID}" />
 
         <meta-data
+            android:name="kr.co.inforexseoul.compose_map.translate.GOOGLE_TRANSLATION_KEY"
+            android:value="${GOOGLE_TRANSLATION_KEY}" />
+
+        <meta-data
             android:name="kr.co.inforexseoul.compose_map.translate.NAVER_CLIENT_SECRET"
             android:value="${NAVER_CLIENT_SECRET}" />
 

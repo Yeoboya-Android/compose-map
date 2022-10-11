@@ -41,6 +41,7 @@ fun TranslateScreen(
 
     val apiItemList = arrayListOf<String>().apply {
         add("Firebase ML Kit")
+        add("Google Translation")
         add("Naver Papago")
     }
 
@@ -115,7 +116,7 @@ fun TranslateScreen(
                     text = sourceText.value,
                     sourceLanguage = sourceLanguage.value,
                     targetLanguage = targetLanguage.value,
-                    isMlKit = apiText.value == "Firebase ML Kit" // todo 바꾸기..
+                    apiText = apiText.value
                 )
                 focusManager.clearFocus()
             }
@@ -180,7 +181,6 @@ fun LanguageSelector(
     targetText: MutableState<String>,
     itemList: ArrayList<Pair<String, String>>,
 ) {
-    Log.i("qwe123", "LanguageSelector():::")
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

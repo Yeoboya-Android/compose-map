@@ -22,7 +22,7 @@ object RoomModule {
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "compose_map.db")
             .setQueryCallback(
-                { sqlQuery, _ -> Log.i("qwe123", "sqlQuery: $sqlQuery") },
+                { sqlQuery, _ -> /*Log.i("qwe123", "sqlQuery: $sqlQuery")*/ },
                 Executors.newSingleThreadExecutor()
             )
             .fallbackToDestructiveMigration()

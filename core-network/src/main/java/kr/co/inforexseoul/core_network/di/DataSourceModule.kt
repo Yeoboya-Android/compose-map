@@ -19,6 +19,11 @@ interface DataSourceModule {
     ): PapagoRemoteDataSource
 
     @Binds
+    fun bindsGoogleTranslationRemoteDataSource(
+        googleTranslationRemoteDataSourceImpl: GoogleTranslationRemoteDataSourceImpl
+    ): GoogleTranslationRemoteDataSource
+
+    @Binds
     fun bindsClovaSpeechRemoteDataSource(
         clovaSpeechRemoteDataSourceImpl: ClovaSpeechRemoteDataSourceImpl
     ): ClovaSpeechRemoteDataSource

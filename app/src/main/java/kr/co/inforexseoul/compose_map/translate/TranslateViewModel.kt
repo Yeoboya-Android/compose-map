@@ -10,12 +10,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kr.co.inforexseoul.compose_map.BuildConfig
+import kr.co.inforexseoul.core_data.usecase.GetGoogleTranslateTextUseCase
 import kr.co.inforexseoul.core_data.usecase.GetTranslateTextUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class TranslateViewModel @Inject constructor(
     private val getTranslateTextUseCase: GetTranslateTextUseCase,
+    private val getGoogleTranslateTextUseCase : GetGoogleTranslateTextUseCase
 ) : ViewModel() {
 
     private val _translateState = MutableStateFlow<TranslateState>(TranslateState.UnInit)
@@ -33,27 +35,39 @@ class TranslateViewModel @Inject constructor(
         text: String,
         sourceLanguage: String,
         targetLanguage: String,
-        isMlKit: Boolean
+        apiText: String
     ) {
-        if (isMlKit) {
-            mlKitTranslate(text, sourceLanguage, targetLanguage)
-                .onEach { _translateState.value = it }
-                .launchIn(viewModelScope)
-        } else {
-            getTranslateTextUseCase.invoke(
-                clientId = BuildConfig.NAVER_CLIENT_ID,
-                clientSecret = BuildConfig.NAVER_CLIENT_SECRET,
-                source = sourceLanguage,
-                target = targetLanguage,
-                text = text
-            )
-            .onStart { _translateState.value = TranslateState.Loading }
-            .map { _translateState.value = TranslateState.Success(it) }
-            .catch {
-                Log.e("qwe123", "error: ${it.stackTraceToString()}")
-                _translateState.value = TranslateState.Error("error")
+        when (apiText) {
+            "Firebase ML Kit" -> {
+                mlKitTranslate(text, sourceLanguage, targetLanguage)
+                    .onEach { _translateState.value = it }
+                    .launchIn(viewModelScope)
             }
-            .launchIn(viewModelScope)
+            "Google Translation" -> {
+                getGoogleTranslateTextUseCase.invoke(
+                    key = BuildConfig.GOOGLE_TRANSLATION_KEY,
+                    source = sourceLanguage,
+                    target = targetLanguage,
+                    text = text
+                )
+                .onStart { _translateState.value = TranslateState.Loading }
+                .map { _translateState.value = TranslateState.Success(it) }
+                .catch { _translateState.value = TranslateState.Error("error")}
+                .launchIn(viewModelScope)
+            }
+            "Naver Papago" -> {
+                getTranslateTextUseCase.invoke(
+                    clientId = BuildConfig.NAVER_CLIENT_ID,
+                    clientSecret = BuildConfig.NAVER_CLIENT_SECRET,
+                    source = sourceLanguage,
+                    target = targetLanguage,
+                    text = text
+                )
+                .onStart { _translateState.value = TranslateState.Loading }
+                .map { _translateState.value = TranslateState.Success(it) }
+                .catch { _translateState.value = TranslateState.Error("error")}
+                .launchIn(viewModelScope)
+            }
         }
     }
 

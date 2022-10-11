@@ -88,16 +88,12 @@ fun VideoScreen(
 
         val result by videoViewModel.videoUploadState.collectAsStateWithLifecycle()
         when (result) {
-            is SubtitleState.UnInit -> {
-                Log.i("qwe123", "subtitlesState UnInit")
-            }
+            is SubtitleState.UnInit -> Unit
             is SubtitleState.Loading -> {
                 clovaData = null
                 LoadingBar()
-                Log.i("qwe123", "subtitlesState loading")
             }
             is SubtitleState.Success -> {
-                Log.i("qwe123", "subtitlesState success")
                 val data = (result as SubtitleState.Success).data
                 clovaData = data
             }
@@ -169,7 +165,6 @@ private fun getExoplayer(
     videoUri: Uri,
     subtitleUri: Uri
 ): ExoPlayer {
-    Log.i("qwe123", "getExoplayer()::: srt path: ${subtitleUri.path}")
     return ExoPlayer.Builder(context).build().apply {
         val subtitle = MediaItem.SubtitleConfiguration.Builder(subtitleUri)
             .setMimeType(MimeTypes.APPLICATION_SUBRIP)
@@ -202,8 +197,6 @@ private fun getSubtitleUri(context: Context, jsonName: String): Uri {
 }
 
 private fun getSubtitleUri(context: Context, data: ClovaSpeechDataModel): Uri {
-    Log.d("qwe123", "getSubTitleUri() data size: ${data.segments.size}")
-
     var srtString = ""
     data.segments.forEachIndexed { index, segment ->
         val appendStr = getSrtText(index, segment)

@@ -25,6 +25,7 @@ object NetworkModule {
 
     // 번역
     private const val baseUrlPapago = "https://openapi.naver.com/v1/papago/"
+    private const val baseUrlGoogleTranslation = "https://translation.googleapis.com/"
 
     // 날씨
     private const val baseUrlVillageForecast = "http://apis.data.go.kr/"
@@ -40,8 +41,12 @@ object NetworkModule {
         val okHttpClientBuilder = OkHttpClient.Builder()
             .addInterceptor { chain->
                 val request = chain.request()
+                val response = chain.proceed(request)
+                val bodyString = response.body!!.string()
+                val body = bodyString.toResponseBody(response.body!!.contentType())
                 Log.d("qwe123", "request url: ${request.url}")
-                chain.proceed(request)
+                Log.d("qwe123", "response bodyString: $bodyString")
+                response.newBuilder().body(body).build()
             }
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -78,6 +83,11 @@ object NetworkModule {
     @Provides
     fun providesPapagoApiService(retrofit: Retrofit.Builder): PapagoApiService =
         retrofit.baseUrl(baseUrlPapago).build().create(PapagoApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesGoogleTranslationApiService(retrofit: Retrofit.Builder): GoogleTranslationApiService =
+        retrofit.baseUrl(baseUrlGoogleTranslation).build().create(GoogleTranslationApiService::class.java)
 
     @Singleton
     @Provides

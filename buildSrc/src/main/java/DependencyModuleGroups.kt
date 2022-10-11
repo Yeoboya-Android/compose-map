@@ -48,7 +48,7 @@ internal val appDependencies: List<DependencyType>
         Implementation(Libs.Lottie.LOTTIE_COMPOSE),
 
         /* 번역 */
-        Implementation(Libs.Google.GOOGLE_TRANSLATE),
+        Implementation(Libs.Google.GOOGLE_ML_KIT_TRANSLATE),
 
         /* 번역 */
         Implementation(Libs.Google.GOOGLE_EXOPLAYER),

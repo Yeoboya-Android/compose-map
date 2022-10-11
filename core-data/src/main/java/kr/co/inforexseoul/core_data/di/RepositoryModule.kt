@@ -35,6 +35,10 @@ interface RepositoryModule {
         papagoRepository: PapagoRepositoryImpl
     ): PapagoRepository
 
+    @Binds
+    fun bindsGoogleTranslationRepository(
+        googleTranslationRepository: GoogleTranslationRepositoryImpl
+    ): GoogleTranslationRepository
 
     @Binds
     fun bindsClovaSpeechRepository(

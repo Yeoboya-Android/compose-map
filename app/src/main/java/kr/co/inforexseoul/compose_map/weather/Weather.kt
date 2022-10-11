@@ -50,12 +50,9 @@ fun WeatherView(
         val result by weatherViewModel.districtState.collectAsStateWithLifecycle()
         when (result) {
             is Result.Error -> Log.e("qwe123", "district error")
-            is Result.Loading -> {
-                Log.d("qwe123", "select district loading")
-            }
+            is Result.Loading -> Unit
             is Result.Success -> {
                 val district = (result as Result.Success<District>).data
-                Log.d("qwe123", "WeatherView()::: district name: ${district.districtName}")
                 WeatherBottomSlideDialog(
                     open = open,
                     coordinate = coordinate,
@@ -78,7 +75,6 @@ fun WeatherBottomSlideDialog(
     district: District,
     weatherViewModel: WeatherViewModel
 ) {
-    Log.d("qwe123", "WeatherBottomSlideDialog()::: district name: ${district.districtName}")
     if (isGoogleMap) {
         val result by weatherViewModel.openWeatherForecastState.collectAsStateWithLifecycle()
         when (result) {
@@ -124,7 +120,6 @@ fun WeatherBottomSlideDialog(
 /** 기상청 API */
 @Composable
 fun VillageForecastContent(title: String, data: List<WeatherDataModel>) {
-    Log.d("qwe123", "VillageForecastContent():::")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -192,7 +187,6 @@ fun VillageForecastItem(data: WeatherDataModel) {
 /** Open Weather API */
 @Composable
 fun OpenWeatherForecastContent(title: String, data: OpenWeatherForecastModel) {
-    Log.d("qwe123", "OpenWeatherForecastContent():::")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

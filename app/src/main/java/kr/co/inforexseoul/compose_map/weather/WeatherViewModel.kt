@@ -53,7 +53,6 @@ class WeatherViewModel @Inject constructor(
     var villageForecastState = _villageForecastState
 
     fun getDistrict(latitude: Double, longitude: Double) {
-        Log.e("qwe123", "WeatherViewModel.setDistrict():::")
         selectDistrictUseCase.invoke(
             latitude = latitude,
             longitude = longitude,
@@ -67,7 +66,6 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun getOpenWeatherForecast(latitude: Double, longitude: Double) {
-        Log.e("qwe123", "WeatherViewModel.getOpenWeatherForecast():::")
         getOpenWeatherForecastUseCase.invoke(
             appId = BuildConfig.OPEN_WEATHER_MAP_KEY,
             latitude = latitude,
@@ -83,7 +81,6 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun getVillageForecast(nx: Int, ny: Int) {
-        Log.e("qwe123", "WeatherViewModel.getVillageForecast():::")
         getVillageForecastUseCase.invoke(
             serviceKey = BuildConfig.VILLAGE_FORECAST,
             numOfRows = 1000,

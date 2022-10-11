@@ -45,7 +45,6 @@ class VideoSubtitlesViewModel @Inject constructor(
     }
 
     fun uploadVideo(file: File) {
-        Log.d("qwe123", "VideoSubtitlesViewModel.uploadVideo()::: path: ${file.path}, exists: ${file.exists()}")
         getClovaSubtitlesWithUploadUseCase.invoke(
             secretKey = BuildConfig.CLOVA_SPEECH_SECRET,
             file = file,
